@@ -206,7 +206,7 @@ def plot_mc_data_sig(data_hist: Hist,
                      savename: str | Path | None = None,
                      signal_name: str | None = None,
                      limit_value = None,
-                     unblind: bool = False,
+                     unblind_edge: float = 0.8,
                      control_region: bool = False
                      ) -> None:
 
@@ -223,17 +223,17 @@ def plot_mc_data_sig(data_hist: Hist,
     
     # default mask is all bins are blinded (False -> blinded)
     mask = np.zeros_like(data_hist.values(), dtype=bool)
-    # unblind all bins up to 0.8 
-    if unblind:
-        if len(bin_edges) > 2:
-            mask = bin_edges[1:] < 0.8
-            if all(~mask):
-                # unblind just the first bin
-                mask = np.zeros_like(data_hist.values(), dtype=bool)
-                mask[0] = True
-        else:
-            # don't unblind
+    # unblind all bins up to unblind_edge 
+    if unblind_edge:
+        #if len(bin_edges) > 2: still from the partial unblind
+        mask = bin_edges[1:] < unblind_edge 
+        if all(~mask):
+            # unblind just the first bin
             mask = np.zeros_like(data_hist.values(), dtype=bool)
+            mask[0] = True
+    else:
+        # don't unblind
+        mask = np.zeros_like(data_hist.values(), dtype=bool)
     if control_region:
         mask = np.ones_like(data_hist.values(), dtype=bool)
     # blind data
@@ -284,7 +284,7 @@ def plot_mc_data_sig(data_hist: Hist,
     if not signal_hist is None:
         signal_hist.plot(color='black', ax=ax1, label=label if signal_name is not None else None) #signal_name)
     
-    if unblind:
+    if unblind_edge < 1.0:
         if any(mask):
             idx = np.where(mask)[0][-1] + 1
             x = data_hist.axes[0].edges[idx]
@@ -305,10 +305,7 @@ def plot_mc_data_sig(data_hist: Hist,
     ax2.set_ylabel("Data/MC")
 
     ax2.hlines(1, 0, 1, color='black', linestyle='--')
-    if not signal_hist is None:
-        ax2.hlines([0.75, 1.25], 0, 1, color='grey', linestyle='--')
-    else:
-        ax2.hlines([0.5, 1.5], 0, 1, color='grey', linestyle='--')
+    ax2.hlines([0.5, 1.5], 0, 1, color='grey', linestyle='--')
     hep.histplot(data_hist.values()/sum(bkgd_stack).values(),
                  data_hist.axes[0].edges,
                  yerr=np.sqrt(data_hist.variances())/sum(bkgd_stack).values(),
@@ -319,10 +316,7 @@ def plot_mc_data_sig(data_hist: Hist,
                         err_down=bkgd_errors_down,
                         ax=ax2,
                         mode="ratio")
-    if not signal_hist is None:
-        ax2.set_ylim(0.7, 1.3)
-    else:
-        ax2.set_ylim(0.4, 1.6)
+    ax2.set_ylim(0.4, 1.6)
     ax2.set_xlim(0, 1)
     ax2.set_xticks(data_hist.axes[0].edges, [round(i, 4) for i in bin_edges], rotation=60)
     if not savename is None:
@@ -339,7 +333,7 @@ def make_plots(input_dir: str | Path,
                year: str,
                spin: str,
                limits_file: str | Path | None = None,
-               unblind: bool = False, 
+               unblind_edge: float = 0.8, 
                control_region: bool = False) -> None:
     if output_dir == "":
         output_dir = f"./{Path(input_dir).parent.stem}"
@@ -374,7 +368,7 @@ def make_plots(input_dir: str | Path,
                              signal_name=signal_name,
                              savename=f"{output_dir}/{year}/{channel}/{cat}/{filename.stem}.pdf",
                              limit_value=lim,
-                             unblind=unblind,
+                             unblind_edge=unblind_edge,
                              control_region=control_region)
         else: 
             signal_name = " ".join(signal_name.split("_")[0:5]).replace("ggf", "ggf;").replace("spin ", 's:').replace("mass ", "m:")
@@ -390,7 +384,7 @@ def make_plots(input_dir: str | Path,
                              signal_name=signal_name,
                              savename=f"{output_dir}/{year}/{channel}/{cat}/{filename.stem}.pdf",
                              limit_value=None,
-                             unblind=unblind)
+                             unblind_edge=unblind_edge)
 
 
 def main(input_dir: str | Path,
