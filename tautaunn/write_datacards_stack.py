@@ -1022,8 +1022,8 @@ def _write_datacard(
             all_bkgds_weights = np.concatenate([v[1] for v in all_bkgds.values()])
 
             if len(hh_values) == 0:
-                print(f"no signal events found in ({category},{spin},{mass})")
-                bin_edges, stop_reason, bin_counts = [0., 1.], "no signal events found", None
+                print(f"no signal events found in ({category},{spin},{mass}), not writing datacard.")
+                return (None, None, None)
             else:
                 bin_edges, stop_reason, bin_counts = flats_systs(
                     hh_shifts=hh_shifts,
