@@ -36,12 +36,17 @@ datacard_years = {
     "2016": "2016",
     "2017": "2017",
     "2018": "2018",
+    "2022": "2022",
+    "2022EE": "2022",
+    "2023": "2023",
+    "2023BPix": "2023",
+    "2024": "2024"
 }
 
 processes = OrderedDict({
     "TT": {
         "id": 1,
-        "sample_patterns": ["TT_*"],
+        "sample_patterns": ["TT_*", "TTto*"],
     },
     "ST": {
         "id": 2,
@@ -49,7 +54,7 @@ processes = OrderedDict({
     },
     "DY": {
         "id": 3,
-        "sample_patterns": ["DY_*"],
+        "sample_patterns": ["DY_*", "DYto*"],
     },
     "W": {
         "id": 4,
@@ -107,12 +112,16 @@ processes = OrderedDict({
         "id": 17,
         "sample_patterns": ["ttHToTauTau"],
     },
-    # "ggHH_hbbhtt": {
-    #     "id": 18,
-    #     "sample_patterns": ["GGHH_SM"],
-    # },
-    "QCD": {
+    "ggHH_hbbhtt": {
+        "id": 18,
+        "sample_patterns": ["ggHH*"],
+    },
+    "qqHH_hbbhtt": {
         "id": 19,
+        "sample_patterns": ["qqHH*"],
+    },
+    "QCD": {
+        "id": 20,
         "sample_patterns": [],
     },
     **{
@@ -177,6 +186,11 @@ skim_dirs = {
     "2016": os.environ["TN_SKIMS_2016"],
     "2017": os.environ["TN_SKIMS_2017"],
     "2018": os.environ["TN_SKIMS_2018"],
+    "2022": os.environ["TN_SKIMS_2022"],
+    "2022EE": os.environ["TN_SKIMS_2022EE"],
+    "2023": os.environ["TN_SKIMS_2023"],
+    "2023BPix": os.environ["TN_SKIMS_2023BPix"],
+    "2024": os.environ["TN_SKIMS_2024"]
 }
 
 
@@ -211,6 +225,11 @@ luminosities = {
     "2016": 16_800.0,
     "2017": 41_480.0,
     "2018": 59_830.0,
+    "2022": 7_980.0,
+    "2022EE": 23_589.0,
+    "2023": 18_063.0,
+    "2023BPix": 9_693.0,
+    "2024": 107_900.0
 }
 
 btag_wps = {
@@ -273,12 +292,19 @@ class Sample:
     loss_weight: float = 1.0
     spin: int = -1
     mass: float = -1.0
+    category: str = ''
+    version: str = ''
 
     YEAR_FLAGS: ClassVar[dict[str, int]] = {
         "2016APV": 0,
         "2016": 1,
         "2017": 2,
         "2018": 3,
+        "2022": 4,
+        "2022EE": 5,
+        "2023": 6,
+        "2023BPix": 7,
+        "2024": 8
     }
 
     def __hash__(self) -> int:
@@ -320,6 +346,8 @@ class Sample:
             loss_weight=loss_weight,
             spin=self.spin,
             mass=self.mass,
+            category=self.category,
+            version=self.version
         )
 
 
@@ -413,6 +441,115 @@ sample_sets = {
         "2017_DY_amc_PtZ_100To250",
         "2017_TT_semiLep",
     ),
+    "vbf": [
+        Sample("qqHH_CV_1_C2V_1_kl_1_hbbhtt", year="2022EE", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_1_C2V_0_kl_1_hbbhtt", year="2022EE", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_1p74_C2V_1p37_kl_14p4_hbbhtt", year="2022EE", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_m0p012_C2V_0p030_kl_10p2_hbbhtt", year="2022EE", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        # Sample("qqHH_CV_m0p758_C2V_1p44_kl_m19p3_hbbhtt", year="2022EE", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_m0p962_C2V_0p959_kl_m1p43_hbbhtt", year="2022EE", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_m1p21_C2V_1p94_kl_m0p94_hbbhtt", year="2022EE", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        # Sample("qqHH_CV_m1p60_C2V_2p72_kl_m1p36_hbbhtt", year="2022EE", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        # Sample("qqHH_CV_m1p83_C2V_3p57_kl_m3p39_hbbhtt", year="2022EE", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        # Sample("qqHH_CV_2p12_C2V_3p87_kl_m5p96_hbbhtt", year="2022EE", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2022EE", category="vbf_loose", version="Prod_26_01", label=0, spin=0, mass=250.0),
+        # Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2022EE", category="vbf_loose", version="Prod_26_01", label=0, spin=0, mass=250.0),
+        Sample("ggHH_kl_2p45_kt_1_c2_0_hbbhtt", year="2022EE", category="vbf_loose", version="Prod_26_01", label=0, spin=0, mass=250.0),
+        Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2022EE", category="vbf_loose", version="Prod_26_01", label=0, spin=0, mass=250.0),
+        Sample("DYto2[E,M]*", year="2022EE", category="vbf_loose", version="Prod_26_01", label=2),
+        Sample("DYto2Tau-2Jets_MLL-50_0J", year="2022EE", category="vbf_loose", version="Prod_26_01", label=2),
+        Sample("DYto2Tau-2Jets_MLL-50_1J", year="2022EE", category="vbf_loose", version="Prod_26_01", label=2),
+        Sample("DYto2Tau-2Jets_MLL-50_2J", year="2022EE", category="vbf_loose", version="Prod_26_01", label=2),
+        Sample("TTto2L2Nu", year="2022EE", category="vbf_loose", version="Prod_26_01", label=1),
+        Sample("TTtoLNu2Q", year="2022EE", category="vbf_loose", version="Prod_26_01", label=1),
+        Sample("TTto4Q", year="2022EE", category="vbf_loose", version="Prod_26_01", label=1),
+        Sample("qqHH_CV_1_C2V_1_kl_1_hbbhtt", year="2022", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_1_C2V_0_kl_1_hbbhtt", year="2022", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_1p74_C2V_1p37_kl_14p4_hbbhtt", year="2022", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_m0p012_C2V_0p030_kl_10p2_hbbhtt", year="2022", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        # Sample("qqHH_CV_m0p758_C2V_1p44_kl_m19p3_hbbhtt", year="2022", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_m0p962_C2V_0p959_kl_m1p43_hbbhtt", year="2022", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_m1p21_C2V_1p94_kl_m0p94_hbbhtt", year="2022", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        # Sample("qqHH_CV_m1p60_C2V_2p72_kl_m1p36_hbbhtt", year="2022", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        # Sample("qqHH_CV_m1p83_C2V_3p57_kl_m3p39_hbbhtt", year="2022", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        # Sample("qqHH_CV_2p12_C2V_3p87_kl_m5p96_hbbhtt", year="2022", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2022", category="vbf_loose", version="Prod_26_01", label=0, spin=0, mass=250.0),
+        # Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2022", category="vbf_loose", version="Prod_26_01", label=0, spin=0, mass=250.0),
+        Sample("ggHH_kl_2p45_kt_1_c2_0_hbbhtt", year="2022", category="vbf_loose", version="Prod_26_01", label=0, spin=0, mass=250.0),
+        Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2022", category="vbf_loose", version="Prod_26_01", label=0, spin=0, mass=250.0),
+        Sample("DYto2[E,M]*", year="2022", category="vbf_loose", version="Prod_26_01", label=2),
+        Sample("DYto2Tau-2Jets_MLL-50_0J", year="2022", category="vbf_loose", version="Prod_26_01", label=2),
+        Sample("DYto2Tau-2Jets_MLL-50_1J", year="2022", category="vbf_loose", version="Prod_26_01", label=2),
+        Sample("DYto2Tau-2Jets_MLL-50_2J", year="2022", category="vbf_loose", version="Prod_26_01", label=2),
+        Sample("TTto2L2Nu", year="2022", category="vbf_loose", version="Prod_26_01", label=1),
+        Sample("TTtoLNu2Q", year="2022", category="vbf_loose", version="Prod_26_01", label=1),
+        Sample("TTto4Q", year="2022", category="vbf_loose", version="Prod_26_01", label=1),
+        Sample("qqHH_CV_1_C2V_1_kl_1_hbbhtt", year="2023", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_1_C2V_0_kl_1_hbbhtt", year="2023", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_1p74_C2V_1p37_kl_14p4_hbbhtt", year="2023", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_m0p012_C2V_0p030_kl_10p2_hbbhtt", year="2023", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        # Sample("qqHH_CV_m0p758_C2V_1p44_kl_m19p3_hbbhtt", year="2023", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_m0p962_C2V_0p959_kl_m1p43_hbbhtt", year="2023", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_m1p21_C2V_1p94_kl_m0p94_hbbhtt", year="2023", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        # Sample("qqHH_CV_m1p60_C2V_2p72_kl_m1p36_hbbhtt", year="2023", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        # Sample("qqHH_CV_m1p83_C2V_3p57_kl_m3p39_hbbhtt", year="2023", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        # Sample("qqHH_CV_2p12_C2V_3p87_kl_m5p96_hbbhtt", year="2023", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2023", category="vbf_loose", version="Prod_26_01", label=0, spin=0, mass=250.0),
+        # Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2023", category="vbf_loose", version="Prod_26_01", label=0, spin=0, mass=250.0),
+        Sample("ggHH_kl_2p45_kt_1_c2_0_hbbhtt", year="2023", category="vbf_loose", version="Prod_26_01", label=0, spin=0, mass=250.0),
+        Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2023", category="vbf_loose", version="Prod_26_01", label=0, spin=0, mass=250.0),
+        Sample("DYto2[E,M]*", year="2023", category="vbf_loose", version="Prod_26_01", label=2),
+        Sample("DYto2Tau-2Jets_MLL-50_0J", year="2023", category="vbf_loose", version="Prod_26_01", label=2),
+        Sample("DYto2Tau-2Jets_MLL-50_1J", year="2023", category="vbf_loose", version="Prod_26_01", label=2),
+        Sample("DYto2Tau-2Jets_MLL-50_2J", year="2023", category="vbf_loose", version="Prod_26_01", label=2),
+        Sample("TTto2L2Nu", year="2023", category="vbf_loose", version="Prod_26_01", label=1),
+        Sample("TTtoLNu2Q", year="2023", category="vbf_loose", version="Prod_26_01", label=1),
+        Sample("TTto4Q", year="2023", category="vbf_loose", version="Prod_26_01", label=1),
+        Sample("qqHH_CV_1_C2V_1_kl_1_hbbhtt", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_1_C2V_0_kl_1_hbbhtt", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_1p74_C2V_1p37_kl_14p4_hbbhtt", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_m0p012_C2V_0p030_kl_10p2_hbbhtt", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        # Sample("qqHH_CV_m0p758_C2V_1p44_kl_m19p3_hbbhtt", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_m0p962_C2V_0p959_kl_m1p43_hbbhtt", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_m1p21_C2V_1p94_kl_m0p94_hbbhtt", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        # Sample("qqHH_CV_m1p60_C2V_2p72_kl_m1p36_hbbhtt", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        # Sample("qqHH_CV_m1p83_C2V_3p57_kl_m3p39_hbbhtt", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        # Sample("qqHH_CV_2p12_C2V_3p87_kl_m5p96_hbbhtt", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=0, spin=0, mass=250.0),
+        # Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=0, spin=0, mass=250.0),
+        Sample("ggHH_kl_2p45_kt_1_c2_0_hbbhtt", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=0, spin=0, mass=250.0),
+        Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=0, spin=0, mass=250.0),
+        Sample("DYto2[E,M]*", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=2),
+        Sample("DYto2Tau-2Jets_MLL-50_0J", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=2),
+        Sample("DYto2Tau-2Jets_MLL-50_1J", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=2),
+        Sample("DYto2Tau-2Jets_MLL-50_2J", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=2),
+        Sample("TTto2L2Nu", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=1),
+        Sample("TTtoLNu2Q", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=1),
+        Sample("TTto4Q", year="2023BPix", category="vbf_loose", version="Prod_26_01", label=1),
+    ],
+    "vbf_2024": [
+         Sample("qqHH_CV_1_C2V_1_kl_1_hbbhtt", year="2024", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_1_C2V_0_kl_1_hbbhtt", year="2024", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_1p74_C2V_1p37_kl_14p4_hbbhtt", year="2024", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_m0p012_C2V_0p030_kl_10p2_hbbhtt", year="2024", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        # Sample("qqHH_CV_m0p758_C2V_1p44_kl_m19p3_hbbhtt", year="2024", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_m0p962_C2V_0p959_kl_m1p43_hbbhtt", year="2024", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("qqHH_CV_m1p21_C2V_1p94_kl_m0p94_hbbhtt", year="2024", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        # Sample("qqHH_CV_m1p60_C2V_2p72_kl_m1p36_hbbhtt", year="2024", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        # Sample("qqHH_CV_m1p83_C2V_3p57_kl_m3p39_hbbhtt", year="2024", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        # Sample("qqHH_CV_2p12_C2V_3p87_kl_m5p96_hbbhtt", year="2024", category="vbf_loose", version="Prod_26_01", label=3, spin=0, mass=250.0),
+        Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2024", category="vbf_loose", version="Prod_26_01", label=0, spin=0, mass=250.0),
+        # Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2024", category="vbf_loose", version="Prod_26_01", label=0, spin=0, mass=250.0),
+        Sample("ggHH_kl_2p45_kt_1_c2_0_hbbhtt", year="2024", category="vbf_loose", version="Prod_26_01", label=0, spin=0, mass=250.0),
+        Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2024", category="vbf_loose", version="Prod_26_01", label=0, spin=0, mass=250.0),
+        Sample("DYto2[E,M]*", year="2024", category="vbf_loose", version="Prod_26_01", label=2),
+        Sample("DYto2Tau-2Jets_MLL-50_0J", year="2024", category="vbf_loose", version="Prod_26_01", label=2),
+        Sample("DYto2Tau-2Jets_MLL-50_1J", year="2024", category="vbf_loose", version="Prod_26_01", label=2),
+        Sample("DYto2Tau-2Jets_MLL-50_2J", year="2024", category="vbf_loose", version="Prod_26_01", label=2),
+        Sample("TTto2L2Nu", year="2024", category="vbf_loose", version="Prod_26_01", label=1),
+        Sample("TTtoLNu2Q", year="2024", category="vbf_loose", version="Prod_26_01", label=1),
+        Sample("TTto4Q", year="2024", category="vbf_loose", version="Prod_26_01", label=1),
+    ]
 }
 
 # label information
@@ -423,15 +560,29 @@ label_sets = {
         1: {"name": "Background", "sample_patterns": ["201*_DY*", "201*_TT*"]},
     },
     "multi3": {
-        0: {"name": "HH", "sample_patterns": [r"^201\d.*_(Rad|Grav)\d+$"]},
-        1: {"name": "TT", "sample_patterns": ["201*_TT*"]},
-        2: {"name": "DY", "sample_patterns": ["201*_DY*"]},
+        0: {"name": "HH", "sample_patterns": [r"^201\d.*_(Rad|Grav)\d+$", "ggHH*", "qqHH*"]},
+        1: {"name": "TT", "sample_patterns": ["201*_TT*", "TTto*"]},
+        2: {"name": "DY", "sample_patterns": ["201*_DY*", "DYto*"]},
     },
     "multi4": {
         0: {"name": "HH", "sample_patterns": [r"^201\d.*_(Rad|Grav)\d+$"]},
         1: {"name": "DY", "sample_patterns": ["201*_DY*"]},
         2: {"name": "TT", "sample_patterns": ["201*_TT*"]},
         3: {"name": "TTH", "sample_patterns": ["201*_ttHToTauTau*"]},
+    },
+    "quad": {
+        0: {"name": "HH", "sample_patterns": [r"^201\d.*_(Rad|Grav)\d+$", "ggHH*"]},
+        1: {"name": "TT", "sample_patterns": ["201*_TT*", "TTto*"]},
+        2: {"name": "DY", "sample_patterns": ["201*_DY*", "DYto*"]},
+        3: {"name": "VBF", "sample_patterns": ["qqHH*"]}
+    },
+    "HHvsVBF": {
+        0: {"name": "HH", "sample_patterns": [r"^201\d.*_(Rad|Grav)\d+$", "ggHH*"]},
+        1: {"name": "VBF", "sample_patterns": ["qqHH*"]}
+    },
+    "SigvsBkg": {
+        0: {"name": "HH", "sample_patterns": [r"^201\d.*_(Rad|Grav)\d+$", "ggHH*"]},
+        1: {"name": "TT", "sample_patterns": ["201*_TT*", "TTto*", "DYto*", "Wto*"]}
     },
 }
 
@@ -651,6 +802,88 @@ cont_feature_sets = {
         "bjet1_px", "bjet1_py", "bjet1_pz", "bjet1_e", "bjet1_btag_deepFlavor", "bjet1_cID_deepFlavor", "bjet1_HHbtag",
         "bjet2_px", "bjet2_py", "bjet2_pz", "bjet2_e", "bjet2_btag_deepFlavor", "bjet2_cID_deepFlavor", "bjet2_HHbtag",
     ],
+    "vbf": [
+        *[
+            f"dau{i}_{feat}"
+            for i in [1, 2]
+            for feat in ["px", "py", "pz", "e"]
+        ],
+        *[
+            f"bjet{i}_{feat}"
+            for i in [1, 2]
+            for feat in [
+                "px", "py", "pz", "e", "pnet_b", "pnet_CvsB", "pnet_CvsL", "HHbtag"
+            ]
+        ],
+        *[
+            f"nu{i}_{feat}"
+            for i in [1, 2]
+            for feat in [
+                "px", "py", "pz"
+            ]
+        ],
+        "fatjet_px", "fatjet_py", "fatjet_pz", "fatjet_e",
+        "htt_regr_px", "htt_regr_py", "htt_regr_pz", "htt_regr_e",
+        "hbb_px", "hbb_py", "hbb_pz", "hbb_e",
+        "httfatjet_regr_px", "httfatjet_regr_py", "httfatjet_regr_pz", "httfatjet_regr_e", 
+        *[
+            f"vbfjet{i}_{feat}"
+            for i in [1, 2]
+            for feat in [
+                "px", "py", "pz", "e", "pnet_QvsG"
+            ]
+        ],
+        "M_chi",
+        "VBFjj_mass", "VBFdeltaR",
+        "etaprod_bb", "etaprod_vbfjvbfj",
+        "fwMoment_s_0", "fwMoment_1_0",
+        "fwMoment_T_3"
+    ],
+    "vbf_b": [
+        *[
+            f"dau{i}_{feat}"
+            for i in [1, 2]
+            for feat in ["px", "py", "pz", "e"]
+        ],
+        *[
+            f"bjet{i}_{feat}"
+            for i in [1, 2]
+            for feat in [
+                "px", "py", "pz", "e", "pnet_b", "pnet_CvsB", "pnet_CvsL", "HHbtag"
+            ]
+        ],
+        *[
+            f"nu{i}_{feat}"
+            for i in [1, 2]
+            for feat in [
+                "px", "py", "pz"
+            ]
+        ],
+        "fatjet_px", "fatjet_py", "fatjet_pz", "fatjet_e",
+        "htt_regr_px", "htt_regr_py", "htt_regr_pz", "htt_regr_e",
+        "hbb_px", "hbb_py", "hbb_pz", "hbb_e",
+        "htthbb_regr_e", "htthbb_regr_px", "htthbb_regr_py", "htthbb_regr_pz",
+        "httfatjet_regr_px", "httfatjet_regr_py", "httfatjet_regr_pz", "httfatjet_regr_e", 
+        *[
+            f"vbfjet{i}_{feat}"
+            for i in [1, 2]
+            for feat in [
+                "px", "py", "pz", "e", "pnet_QvsG"
+            ]
+        ],
+        "M_chi",
+        "VBFjj_mass", "VBFdeltaR",
+        "etaprod_bb", "etaprod_vbfjvbfj",
+        "fwMoment_s_0", "fwMoment_T_0", "fwMoment_1_0",
+        "fwMoment_s_2",
+    ],
+    "boosted": [
+        "dau1_pt", "dau1_eta", "dau2_pt", "dau2_eta",
+        "Htt_svfit_mass", "Htt_svfit_pt", "fatbjet_pt", "fatbjet_msoftdrop",
+        "HH_svfit_mass_msoftdrop", "HH_svfit_pt", "HH_svfit_eta",
+        "Htt_svfit_Hbb_softdrop_deltaEta", "Htt_svfit_Hbb_softdrop_deltaPhi", "dau1_dau2_deltaEta", "dau1_dau2_deltaPhi", 
+        "Hbb_dau1_deltaR", "Hbb_dau2_deltaR"
+    ]
 }
 
 cat_feature_sets = {
@@ -678,6 +911,12 @@ cat_feature_sets = {
     "class": [
         "isBoosted", "pairType", "has_vbf_pair",
     ],
+    "vbf": [
+        "pairType", "dau1_DM", "dau2_DM", "dau1_charge", "dau2_charge", "hasResolvedAK4", "hasBoostedAK8", "hasVBFAK4",
+    ],
+    "boosted": [
+        "dau1_DM", "dau2_DM", "dau1_charge", "dau2_charge", "hasBoostedAK8",
+    ],
 }
 
 # selection sets can be strings, lists (which will be AND joined) or dictionaries with years mapping to strings or lists
@@ -687,11 +926,26 @@ selection_sets = {
         "nbjetscand > 1",
         "nleps == 0",
         "isOS == 1",
-        "dau2_deepTauVsJet >= 5",
+        "PuppiMET_covXX >= 0",
+        "PuppiMET_covYY >= 0",
+        # "fwMoment_eta_2 >= -1", 
+        # "fwMoment_eta_2 < 100",
+        # "relHtt_pt_mass < 100000", "relHbb_pt_mass < 100000",
+        # "dau2_tauIdVSjet >= 5",
         (
-            "((pairType == 0) & (dau1_iso < 0.15) & (isLeptrigger == 1)) | "
-            "((pairType == 1) & (dau1_eleMVAiso == 1) & (isLeptrigger == 1)) | "
-            "((pairType == 2) & (dau1_deepTauVsJet >= 5))"
+            "((pairType == 0) & (dau2_tauIdVSjet >= 5)) | "
+            "((pairType == 1) & (dau2_tauIdVSjet >= 5)) | "
+            "((pairType == 2) & (dau2_tauIdVSjet >= 5) & (dau1_tauIdVSjet >= 5)) | "
+            "((pairType == 6) & (dau2_tauIdVSjet >= 0.984) & (dau1_tauIdVSjet >= 0.984) & deltaRtautau > 0.05)"
+        ),
+    ]),
+    "baseline_boosted": (baseline_selection := [
+        "isOS == 1",
+        "dau2_tauIdVSjet >= 5",
+        (
+            "(pairType == 0) | "
+            "(pairType == 1) | "
+            "((pairType == 2) & (dau1_tauIdVSjet >= 5))"
         ),
     ]),
     "baseline_lbtag": {
@@ -724,11 +978,104 @@ selection_sets = {
     ],
 }
 
-klub_aliases: dict[str, str] = {
-    "bjet1_btag_deepFlavor": "bjet1_bID_deepFlavor",
-    "bjet2_btag_deepFlavor": "bjet2_bID_deepFlavor",
-    "dau1_charge": "dau1_flav / abs(dau1_flav)",
-    "dau2_charge": "dau2_flav / abs(dau2_flav)",
+klub_aliases: dict[str, str] = {}
+
+klub_index_columns = [
+    "event",
+    "run",
+    "luminosityBlock",
+]
+
+klub_category_columns = []
+
+klub_weight_columns = [
+    "genWeight",
+    "puWeight",
+    # "trigSF",
+    "DYstitchWeight",
+    "idAndIsoAndFakeSF",
+    "bTagweightReshape",
+    "PrescaleWeight_PNetTauTau0p03",
+]
+
+klub_extra_weight_columns = []
+klub_extra_columns = []
+
+cclub_aliases: dict[str, str] = {
+    "vbfjet1_px": "vbfjet1_px_nom",
+    "vbfjet1_py": "vbfjet1_py_nom", 
+    "vbfjet1_pz": "vbfjet1_pz_nom", 
+    "vbfjet1_e": "vbfjet1_e_nom",
+    "vbfjet2_px": "vbfjet2_px_nom",
+    "vbfjet2_py": "vbfjet2_py_nom", 
+    "vbfjet2_pz": "vbfjet2_pz_nom", 
+    "vbfjet2_e": "vbfjet2_e_nom",
+    "vbfjet1_pnet_QvsG": "vbfjet1_btagQvG",
+    "vbfjet2_pnet_QvsG": "vbfjet1_btagQvG",
+    "fatbjet_pt": "fatbjet_pt_nom",
+    "fatbjet_pt": "fatbjet_pt_nom",
+    "fatbjet_msoftdrop": "fatbjet_msoftdrop_nom",
+    "vbfjet1_pt": "vbfjet1_pt_nom",
+    "vbfjet2_pt": "vbfjet2_pt_nom",
+    "fatjet_phi": "fatbjet_phi",
+    "met_pt": "PuppiMET_smeared_pt",
+    "met_phi": "PuppiMET_smeared_phi",
+    "cH_bb": "cH_bb_nom",
+    "relHbb_pt_mass": "relHbb_pt_mass_nom",
+    "met_cov00": "PuppiMET_covXX",
+    "met_cov01": "PuppiMET_covXY",
+    "met_cov11": "PuppiMET_covYY",
+    "met_px": "puppimet_smeared_px",
+    "met_py": "puppimet_smeared_py",
+    "VBFjj_deltaEta": "VBFjj_deltaEta_nom",
+    "VBFjj_mass": "VBFjj_mass_nom",
+    "VBFdeltaR":"VBFdeltaR_nom",
+    "etaprod_vbfjvbfj": "etaprod_vbfjvbfj_nom",
+    "deta_bb": "deta_bb_nom",
+    "fwMoment_s_0": "fwMoment_s_0_nom",
+    "fwMoment_p_0": "fwMoment_p_0_nom",
+    "fwMoment_T_0": "fwMoment_T_0_nom",
+    "fwMoment_z_0": "fwMoment_z_0_nom",
+    "fwMoment_s_2": "fwMoment_s_2_nom",
+    "fwMoment_p_2": "fwMoment_p_2_nom",
+    "fwMoment_T_2": "fwMoment_T_2_nom",
+    "fwMoment_z_2": "fwMoment_z_2_nom", 
+    "fwMoment_s_3": "fwMoment_s_3_nom",
+    "fwMoment_p_3": "fwMoment_p_3_nom",
+    "fwMoment_T_3": "fwMoment_T_3_nom",
+    "fwMoment_z_3": "fwMoment_z_3_nom", 
+    "fwMoment_s_4": "fwMoment_s_4_nom",
+    "fwMoment_p_4": "fwMoment_p_4_nom",
+    "fwMoment_T_4": "fwMoment_T_4_nom",
+    "fwMoment_z_4": "fwMoment_z_4_nom", 
+    "fwMoment_s_8": "fwMoment_s_8_nom",
+    "fwMoment_p_8": "fwMoment_p_8_nom",
+    "fwMoment_T_8": "fwMoment_T_8_nom",
+    "fwMoment_z_8": "fwMoment_z_8_nom",
+    "fwMoment_s_0": "fwMoment_s_0_nom",
+    "fwMoment_p_0": "fwMoment_p_0_nom",
+    "fwMoment_T_0": "fwMoment_T_0_nom",
+    "fwMoment_z_0": "fwMoment_z_0_nom",
+    "fwMoment_s_2": "fwMoment_s_2_nom",
+    "fwMoment_p_2": "fwMoment_p_2_nom",
+    "fwMoment_T_2": "fwMoment_T_2_nom",
+    "fwMoment_z_2": "fwMoment_z_2_nom", 
+    "fwMoment_s_3": "fwMoment_s_3_nom",
+    "fwMoment_p_3": "fwMoment_p_3_nom",
+    "fwMoment_T_3": "fwMoment_T_3_nom",
+    "fwMoment_z_3": "fwMoment_z_3_nom", 
+    "fwMoment_s_4": "fwMoment_s_4_nom",
+    "fwMoment_p_4": "fwMoment_p_4_nom",
+    "fwMoment_T_4": "fwMoment_T_4_nom",
+    "fwMoment_z_4": "fwMoment_z_4_nom", 
+    "fwMoment_s_8": "fwMoment_s_8_nom",
+    "fwMoment_p_8": "fwMoment_p_8_nom",
+    "fwMoment_T_8": "fwMoment_T_8_nom",
+    "fwMoment_z_8": "fwMoment_z_8_nom",
+    "Hbb_pt": "Hbb_pt_nom",
+    "Hbb_eta": "Hbb_eta_nom", 
+    "Hbb_phi": "Hbb_phi_nom", 
+    "Hbb_mass": "Hbb_mass_nom",
 }
 
 klub_index_columns = [
@@ -764,13 +1111,12 @@ klub_category_columns = [
     ],
 ]
 
-klub_weight_columns = [
-    "MC_weight",
-    "PUReweight",
-    "L1pref_weight",
-    "trigSF",
-    "dauSFs",
-    "PUjetID_SF",
+cclub_weight_columns = [
+    "genWeight",
+    "puWeight",
+    # "trigSF",
+    # "DYstitchWeight",
+    "idAndIsoAndFakeSF",
     "bTagweightReshape",
 ]
 
@@ -796,7 +1142,6 @@ reg_plot_columns = [
 ]
 
 dynamic_columns = {
-    # columns needed for rotation
     (rot_phi := "dau_phi"): (
         ("dau1_pt", "dau1_phi", "dau2_pt", "dau2_phi"),
         (lambda pt1, phi1, pt2, phi2: np.arctan2(
@@ -804,430 +1149,181 @@ dynamic_columns = {
             pt1 * np.cos(phi1) + pt2 * np.cos(phi2),
         )),
     ),
-    # actual columns
-    "pass_pnet": (
-        pass_pnet_cols := ("year_flag", "fatjet_particleNetMDJetTags_score"),
-        (lambda year_flag, pnet: (
-            ((year_flag == 0) & (pnet >= pnet_wps["2016APV"])) |
-            ((year_flag == 1) & (pnet >= pnet_wps["2016"])) |
-            ((year_flag == 2) & (pnet >= pnet_wps["2017"])) |
-            ((year_flag == 3) & (pnet >= pnet_wps["2018"]))
-        )),
-    ),
-    "has_bjet1": (
-        ("nbjetscand",),
-        (lambda n: n >= 1),
-    ),
-    "has_bjet2": (
-        ("nbjetscand",),
-        (lambda n: n >= 2),
-    ),
-    "has_bjet_pair": (
-        ("nbjetscand",),
-        (lambda n: n >= 2),
-    ),
-    "dmet_resp_px": (
-        ("DeepMET_ResponseTune_px", "DeepMET_ResponseTune_py", rot_phi),
-        (lambda x, y, p: np.cos(-p) * x - np.sin(-p) * y),
-    ),
-    "dmet_resp_py": (
-        ("DeepMET_ResponseTune_px", "DeepMET_ResponseTune_py", rot_phi),
-        (lambda x, y, p: np.sin(-p) * x + np.cos(-p) * y),
-    ),
-    "dmet_reso_px": (
-        ("DeepMET_ResolutionTune_px", "DeepMET_ResolutionTune_py", rot_phi),
-        (lambda x, y, p: np.cos(-p) * x - np.sin(-p) * y),
-    ),
-    "dmet_reso_py": (
-        ("DeepMET_ResolutionTune_px", "DeepMET_ResolutionTune_py", rot_phi),
-        (lambda x, y, p: np.sin(-p) * x + np.cos(-p) * y),
-    ),
-    "met_dphi": (
-        ("met_phi", rot_phi),
+    "htt_regr_dphi": (
+        ("Htt_regr_phi", rot_phi),
         (lambda a, b: phi_mpi_to_pi(a - b)),
     ),
-    "met_px": (
-        ("met_et", "met_dphi"),
+    "htt_regr_px": (
+        ("Htt_regr_pt", "htt_regr_dphi"),
         (lambda a, b: a * np.cos(b)),
     ),
-    "met_py": (
-        ("met_et", "met_dphi"),
+    "htt_regr_py": (
+        ("Htt_regr_pt", "htt_regr_dphi"),
         (lambda a, b: a * np.sin(b)),
     ),
-    "dau1_dphi": (
-        ("dau1_phi", rot_phi),
-        (lambda a, b: phi_mpi_to_pi(a - b)),
-    ),
-    "dau2_dphi": (
-        ("dau2_phi", rot_phi),
-        (lambda a, b: phi_mpi_to_pi(a - b)),
-    ),
-    "genNu1_dphi": (
-        ("genNu1_phi", rot_phi),
-        (lambda a, b: phi_mpi_to_pi(a - b)),
-    ),
-    "genNu2_dphi": (
-        ("genNu2_phi", rot_phi),
-        (lambda a, b: phi_mpi_to_pi(a - b)),
-    ),
-    "dau1_px": (
-        ("dau1_pt", "dau1_dphi"),
-        (lambda a, b: a * np.cos(b)),
-    ),
-    "dau1_py": (
-        ("dau1_pt", "dau1_dphi"),
-        (lambda a, b: a * np.sin(b)),
-    ),
-    "dau1_pz": (
-        ("dau1_pt", "dau1_eta"),
+    "htt_regr_pz": (
+        ("Htt_regr_pt", "Htt_regr_eta"),
         (lambda a, b: a * np.sinh(b)),
     ),
-    "dau1_m": (
-        ("dau1_px", "dau1_py", "dau1_pz", "dau1_e"),
-        (lambda x, y, z, e: np.sqrt(e ** 2 - (x ** 2 + y ** 2 + z ** 2))),
+    "htt_regr_e": (
+        ("Htt_regr_pt", "Htt_regr_eta", "Htt_regr_phi", "Htt_regr_mass"),
+        (lambda a, b, c, d: calc_energy(a, b, c, d)),
     ),
-    "dau1_mt": (
-        ("dau1_px", "dau1_py", "dau1_pz", "dau1_e", "met_et", "met_dphi"),
-        (lambda a, b, c, d, e, f: calc_mt(a, b, c, d, e, np.zeros_like(a), f, np.zeros_like(a))),
-    ),
-    "dau2_px": (
-        ("dau2_pt", "dau2_dphi"),
-        (lambda a, b: a * np.cos(b)),
-    ),
-    "dau2_py": (
-        ("dau2_pt", "dau2_dphi"),
-        (lambda a, b: a * np.sin(b)),
-    ),
-    "dau2_pz": (
-        ("dau2_pt", "dau2_eta"),
-        (lambda a, b: a * np.sinh(b)),
-    ),
-    "dau2_m": (
-        ("dau2_px", "dau2_py", "dau2_pz", "dau2_e"),
-        (lambda x, y, z, e: np.sqrt(e ** 2 - (x ** 2 + y ** 2 + z ** 2))),
-    ),
-    **{
-        f"htt_{f}": (
-            (f"dau1_{f}", f"dau2_{f}"),
-            (lambda f1, f2: f1 + f2),
-        )
-        for f in ["e", "px", "py", "pz"]
-    },
-    "ditau_deltaphi": (
-        ("dau1_dphi", "dau2_dphi"),
-        (lambda a, b: np.abs(phi_mpi_to_pi(a - b))),
-    ),
-    "ditau_deltaeta": (
-        ("dau1_eta", "dau2_eta"),
-        (lambda a, b: np.abs(a - b)),
-    ),
-    "ditau_deltaR": (
-        ("ditau_deltaphi", "ditau_deltaeta"),
-        (lambda a, b: np.sqrt(a**2 + b**2)),
-    ),
-    "genNu1_px": (
-        ("genNu1_pt", "genNu1_dphi"),
-        (lambda a, b: a * np.cos(b)),
-    ),
-    "genNu1_py": (
-        ("genNu1_pt", "genNu1_dphi"),
-        (lambda a, b: a * np.sin(b)),
-    ),
-    "genNu1_pz": (
-        ("genNu1_pt", "genNu1_eta"),
-        (lambda a, b: a * np.sinh(b)),
-    ),
-    "genNu2_px": (
-        ("genNu2_pt", "genNu2_dphi"),
-        (lambda a, b: a * np.cos(b)),
-    ),
-    "genNu2_py": (
-        ("genNu2_pt", "genNu2_dphi"),
-        (lambda a, b: a * np.sin(b)),
-    ),
-    "genNu2_pz": (
-        ("genNu2_pt", "genNu2_eta"),
-        (lambda a, b: a * np.sinh(b)),
-    ),
-    "bjet1_dphi": (
-        ("bjet1_phi", rot_phi),
+    "htthbb_regr_dphi": (
+        ("htthbb_regr_phi", rot_phi),
         (lambda a, b: phi_mpi_to_pi(a - b)),
     ),
     "bjet1_px": (
-        ("bjet1_pt", "bjet1_dphi"),
-        (lambda a, b: a * np.cos(b)),
+        ("hasResolvedAK4", "bjet1_px_nom"),
+        (lambda a, b: a * b),
     ),
     "bjet1_py": (
-        ("bjet1_pt", "bjet1_dphi"),
-        (lambda a, b: a * np.sin(b)),
+        ("hasResolvedAK4", "bjet1_py_nom"),
+        (lambda a, b: a * b),
     ),
     "bjet1_pz": (
-        ("bjet1_pt", "bjet1_eta"),
-        (lambda a, b: a * np.sinh(b)),
+        ("hasResolvedAK4", "bjet1_pz_nom"),
+        (lambda a, b: a * b),
     ),
-    "bjet2_dphi": (
-        ("bjet2_phi", rot_phi),
-        (lambda a, b: phi_mpi_to_pi(a - b)),
+    "bjet1_e": (
+        ("hasResolvedAK4", "bjet1_e_nom"),
+        (lambda a, b: a * b),
+    ),
+    "bjet1_pnet_b": (
+        ("hasResolvedAK4", "bjet1_btag"),
+        (lambda a, b: a * b + (-1) * (1 - a)),
+    ),
+    "bjet1_pnet_CvsB": (
+        ("hasResolvedAK4", "bjet1_btagCvB"),
+        (lambda a, b: a * b + (-1) * (1 - a)),
+    ),
+    "bjet1_pnet_CvsL": (
+        ("hasResolvedAK4", "bjet1_btagCvL"),
+        (lambda a, b: a * b + (-1) * (1 - a)),
+    ),
+    "bjet1_HHbtag": (
+        ("hasResolvedAK4", "bjet1_hhbtag"),
+        (lambda a, b: a * b + (-1) * (1 - a)),
     ),
     "bjet2_px": (
-        ("bjet2_pt", "bjet2_dphi"),
-        (lambda a, b: a * np.cos(b)),
+        ("hasResolvedAK4", "bjet2_px_nom"),
+        (lambda a, b: a * b),
     ),
     "bjet2_py": (
-        ("bjet2_pt", "bjet2_dphi"),
-        (lambda a, b: a * np.sin(b)),
+        ("hasResolvedAK4", "bjet2_py_nom"),
+        (lambda a, b: a * b),
     ),
     "bjet2_pz": (
-        ("bjet2_pt", "bjet2_eta"),
-        (lambda a, b: a * np.sinh(b)),
+        ("hasResolvedAK4", "bjet2_pz_nom"),
+        (lambda a, b: a * b),
     ),
-    # masked bjet features: when 1, features are set to "missing" values
-    **{
-        f"bjet{i}_masked_{f}": (
-            (f"bjet{i}_{f}", "has_bjet_pair"),
-            (lambda d: (lambda v, has_bjet_pair: np.where(has_bjet_pair, v, d)))(d),  # closure against context leak
-        )
-        for i in [1, 2]
-        for f, d in [
-            ("e", 0.0),
-            ("px", 0.0),
-            ("py", 0.0),
-            ("pz", 0.0),
-            ("btag_deepFlavor", -1.0),
-            ("cID_deepFlavor", -1.0),
-            ("CvsB", -1.0),
-            ("CvsL", -1.0),
-            ("HHbtag", -1.0),
-        ]
-    },
-    # fatjet features
-    "fatjet_dphi": (
-        ("fatjet_phi", rot_phi),
-        (lambda a, b: phi_mpi_to_pi(a - b)),
+    "bjet2_e": (
+        ("hasResolvedAK4", "bjet2_e_nom"),
+        (lambda a, b: a * b),
+    ),
+    "bjet2_pnet_b": (
+        ("hasResolvedAK4", "bjet2_btag"),
+        (lambda a, b: a * b + (-1) * (1 - a)),
+    ),
+    "bjet2_pnet_CvsB": (
+        ("hasResolvedAK4", "bjet2_btagCvB"),
+        (lambda a, b: a * b + (-1) * (1 - a)),
+    ),
+    "bjet2_pnet_CvsL": (
+        ("hasResolvedAK4", "bjet2_btagCvL"),
+        (lambda a, b: a * b + (-1) * (1 - a)),
+    ),
+    "bjet2_HHbtag": (
+        ("hasResolvedAK4", "bjet2_hhbtag"),
+        (lambda a, b: a * b + (-1) * (1 - a)),
+    ),
+    "hbb_px": (
+        ("hasResolvedAK4", "hbb_px_nom"),
+        (lambda a, b: a * b),
+    ),
+    "hbb_py": (
+        ("hasResolvedAK4", "hbb_py_nom"),
+        (lambda a, b: a * b),
+    ),
+    "hbb_pz": (
+        ("hasResolvedAK4", "hbb_pz_nom"),
+        (lambda a, b: a * b),
+    ),
+    "hbb_e": (
+        ("hasResolvedAK4", "hbb_e_nom"),
+        (lambda a, b: a * b),
+    ),
+    "htthbb_regr_px": (
+        ("hasResolvedAK4", "htt_regr_px", "hbb_px_nom"),
+        (lambda a, b, c: a * (b + c)),
+    ),
+    "htthbb_regr_py": (
+        ("hasResolvedAK4", "htt_regr_py", "hbb_py_nom"),
+        (lambda a, b, c: a * (b + c)),
+    ),
+    "htthbb_regr_pz": (
+        ("hasResolvedAK4", "htt_regr_pz", "hbb_pz_nom"),
+        (lambda a, b, c: a * (b + c)),
+    ),
+    "htthbb_regr_e": (
+        ("hasResolvedAK4", "htt_regr_e", "hbb_e_nom"),
+        (lambda a, b, c: a * (b + c)),
+    ),
+    "fatjet_e": (
+        ("hasBoostedAK8", "fatbjet_e_nom"),
+        (lambda a, b: a * b),
     ),
     "fatjet_px": (
-        ("fatjet_pt", "fatjet_dphi"),
-        (lambda a, b: a * np.cos(b)),
+        ("hasBoostedAK8", "fatbjet_px_nom"),
+        (lambda a, b: a * b),
     ),
     "fatjet_py": (
-        ("fatjet_pt", "fatjet_dphi"),
-        (lambda a, b: a * np.sin(b)),
+        ("hasBoostedAK8", "fatbjet_py_nom"),
+        (lambda a, b: a * b),
     ),
     "fatjet_pz": (
-        ("fatjet_pt", "fatjet_eta"),
-        (lambda a, b: a * np.sinh(b)),
+        ("hasBoostedAK8", "fatbjet_pz_nom"),
+        (lambda a, b: a * b),
     ),
-    # masked fat jet features: when not 1, all features are set to 0
-    **{
-        f"fatjet_masked_{f}": (
-            (f"fatjet_{f}", "isBoosted"),
-            (lambda v, isBoosted: np.where(isBoosted, v, 0.0)),
-        )
-        for f in ["e", "px", "py", "pz"]
-    },
-    # masked hbb features, which refer to the bb pair if the pair exists and otherwise to the fat jet
-    **{
-        f"hbb_masked_{f}": (
-            (f"bjet1_masked_{f}", f"bjet2_masked_{f}", "has_bjet_pair"),
-            (lambda f1, f2, has_bjet_pair: np.where(has_bjet_pair, f1 + f2, 0.0)),
-        )
-        for f in ["e", "px", "py", "pz"]
-    },
-    # masked htthbb features
-    **{
-        f"htthbb_masked_{f}": (
-            (f"htt_{f}", f"hbb_masked_{f}", "has_bjet_pair"),
-            (lambda f1, f2, has_bjet_pair: np.where(has_bjet_pair, f1 + f2, 0.0)),
-        )
-        for f in ["e", "px", "py", "pz"]
-    },
-    # masked httfatjet features
-    **{
-        f"httfatjet_masked_{f}": (
-            (f"htt_{f}", f"fatjet_masked_{f}", "isBoosted"),
-            (lambda f1, f2, isBoosted: np.where(isBoosted, f1 + f2, 0.0)),
-        )
-        for f in ["e", "px", "py", "pz"]
-    },
-    # other high-level variables that were tested
-    "dibjet_deltaR": (
-        ("bjet1_phi", "bjet2_phi", "bjet1_eta", "bjet2_eta"),
-        (lambda a, b, c, d: np.sqrt(np.abs(phi_mpi_to_pi(a - b))**2 + np.abs(c - d)**2)),
+    "httfatjet_regr_pz": (
+        ("hasBoostedAK8", "htt_regr_pz", "fatjet_pz"),
+        (lambda a, b, c: a * (b + c)),
     ),
-    "ditau_mt": (
-        ("dau1_pt", "dau1_eta", "dau1_phi", "dau1_e", "dau2_pt", "dau2_eta", "dau2_phi", "dau2_e"),
-        (lambda a, b, c, d, e, f, g, h: calc_mt(a, b, c, d, e, f, g, h)),
+    "httfatjet_regr_e": (
+        ("hasBoostedAK8", "htt_regr_e", "fatjet_e"),
+        (lambda a, b, c: a * (b + c)),
     ),
-    "h_bb_mass": (
-        ("bjet1_pt", "bjet1_eta", "bjet1_phi", "bjet1_e", "bjet2_pt", "bjet2_eta", "bjet2_phi", "bjet2_e"),
-        (lambda a, b, c, d, e, f, g, h: calc_mass(a, b, c, d) + calc_mass(e, f, g, h)),
+     "httfatjet_regr_px": (
+        ("hasBoostedAK8","htt_regr_px", "fatjet_px"),
+        (lambda a, b, c: a * (b + c)),
     ),
-    "top1_mass": (
-        top_info_fields := (
-            "dau1_pt", "dau1_eta", "dau1_phi", "dau1_e", "dau2_pt", "dau2_eta", "dau2_phi", "dau2_e",
-            "bjet1_pt", "bjet1_eta", "bjet1_phi", "bjet1_e", "bjet2_pt", "bjet2_eta", "bjet2_phi", "bjet2_e",
-            "met_et", "met_phi",
-        ),
-        (lambda *args: top_info(*args, kind="top1_mass")),
+    "httfatjet_regr_py": (
+        ("hasBoostedAK8", "htt_regr_py", "fatjet_py"),
+        (lambda a, b, c: a * (b + c)),
     ),
-    "top2_mass": (
-        top_info_fields,
-        (lambda *args: top_info(*args, kind="top2_mass")),
+    "M_chi": (
+        ("hasResolvedAK4", "HH_regr_mass", "Htt_regr_mass", "Hbb_mass_nom"),
+        (lambda d, a, b, c: d * (a - (b - 125.0) - (c - 125.0))),
     ),
-    "top_mass_idx": (
-        top_info_fields,
-        (lambda *args: top_info(*args, kind="indices")),
-    ),
-    "W_distance": (
-        top_info_fields,
-        (lambda *args: boson_info(*args, kind="W")),
-    ),
-    "Z_distance": (
-        top_info_fields,
-        (lambda *args: boson_info(*args, kind="Z")),
-    ),
-    "H_distance": (
-        top_info_fields,
-        (lambda *args: boson_info(*args, kind="H")),
-    ),
-    # "ditau_deltaR_x_sv_pt":(
-    #     ("ditau_deltaR", "tauH_SVFIT_pt"),
-    #     (lambda a, b: a*b)
-    # )
-    "tauH_dphi": (
-        ("tauH_phi", rot_phi),
-        (lambda a, b: phi_mpi_to_pi(a - b)),
-    ),
-    "tauH_px": (
-        ("tauH_pt", "tauH_dphi"),
-        (lambda a, b: a * np.cos(b)),
-    ),
-    "tauH_py": (
-        ("tauH_pt", "tauH_dphi"),
-        (lambda a, b: a * np.sin(b)),
-    ),
-    "tauH_pz": (
-        ("tauH_pt", "tauH_eta"),
-        (lambda a, b: a * np.sinh(b)),
-    ),
-    "bH_dphi": (
-        ("bH_phi", rot_phi),
-        (lambda a, b: phi_mpi_to_pi(a - b)),
-    ),
-    "bH_px": (
-        ("bH_pt", "bH_dphi"),
-        (lambda a, b: a * np.cos(b)),
-    ),
-    "bH_py": (
-        ("bH_pt", "bH_dphi"),
-        (lambda a, b: a * np.sin(b)),
-    ),
-    "bH_pz": (
-        ("bH_pt", "bH_eta"),
-        (lambda a, b: a * np.sinh(b)),
-    ),
-    "HH_e": (
-        ("tauH_e", "bH_e"),
-        (lambda a, b: a + b),
-    ),
-    "HH_px": (
-        ("tauH_px", "bH_px"),
-        (lambda a, b: a + b),
-    ),
-    "HH_py": (
-        ("tauH_py", "bH_py"),
-        (lambda a, b: a + b),
-    ),
-    "HH_pz": (
-        ("tauH_pz", "bH_pz"),
-        (lambda a, b: a + b),
-    ),
-    "tauH_SVFIT_e": (
-        ("tauH_SVFIT_pt", "tauH_SVFIT_eta", "tauH_SVFIT_phi", "tauH_SVFIT_mass"),
-        (lambda a, b, c, d: calc_energy(a, b, c, d)),
-    ),
-    "tauH_SVFIT_dphi": (
-        ("tauH_SVFIT_phi", rot_phi),
-        (lambda a, b: phi_mpi_to_pi(a - b)),
-    ),
-    "tauH_SVFIT_px": (
-        ("tauH_SVFIT_pt", "tauH_SVFIT_dphi"),
-        (lambda a, b: a * np.cos(b)),
-    ),
-    "tauH_SVFIT_py": (
-        ("tauH_SVFIT_pt", "tauH_SVFIT_dphi"),
-        (lambda a, b: a * np.sin(b)),
-    ),
-    "tauH_SVFIT_pz": (
-        ("tauH_SVFIT_pt", "tauH_SVFIT_eta"),
-        (lambda a, b: a * np.sinh(b)),
-    ),
-    "svfit_HH_mass": (
-        ("tauH_SVFIT_e", "tauH_SVFIT_px", "tauH_SVFIT_py", "tauH_SVFIT_pz", "bH_e", "bH_px", "bH_py", "bH_pz"),
-        (lambda a, b, c, d, e, f, g, h: ((a + e)**2 - (b + f)**2 - (c + g)**2 - (d + h)**2)**0.5),
-    ),
-    "svfit_HH_pt": (
-        ("tauH_SVFIT_px", "bH_px", "tauH_SVFIT_py", "bH_py"),
-        (lambda a, b, c, d: ((a + b)**2 + (c + d)**2)**0.5),
-    ),
-    "recoGenTauH_dphi": (
-        ("recoGenTauH_phi", rot_phi),
-        (lambda a, b: phi_mpi_to_pi(a - b)),
-    ),
-    "recoGenTauH_px": (
-        ("recoGenTauH_pt", "recoGenTauH_dphi"),
-        (lambda a, b: a * np.cos(b)),
-    ),
-    "recoGenTauH_py": (
-        ("recoGenTauH_pt", "recoGenTauH_dphi"),
-        (lambda a, b: a * np.sin(b)),
-    ),
-    "recoGenTauH_pz": (
-        ("recoGenTauH_pt", "recoGenTauH_eta"),
-        (lambda a, b: a * np.sinh(b)),
-    ),
-    "recoGen_HH_mass": (
-        ("recoGenTauH_e", "recoGenTauH_px", "recoGenTauH_py", "recoGenTauH_pz", "bH_e", "bH_px", "bH_py", "bH_pz"),
-        (lambda a, b, c, d, e, f, g, h: ((a + e)**2 - (b + f)**2 - (c + g)**2 - (d + h)**2)**0.5),
-    ),
-    "recoGen_HH_pt": (
-        ("recoGenTauH_px", "bH_px", "recoGenTauH_py", "bH_py"),
-        (lambda a, b, c, d: ((a + b)**2 + (c + d)**2)**0.5),
-    ),
-    "hh_pt": (
-        hh_args := ("dau1_pt", "dau1_eta", "dau1_phi", "dau1_e", "dau2_pt", "dau2_eta", "dau2_phi", "dau2_e",
-        "bjet1_pt", "bjet1_eta", "bjet1_phi", "bjet1_e", "bjet2_pt", "bjet2_eta", "bjet2_phi", "bjet2_e",
-        "met_et", "met_phi", "tauH_SVFIT_pt", "tauH_SVFIT_eta", "tauH_SVFIT_phi", "tauH_SVFIT_mass",
-        "HHKin_mass_raw", "HHKin_mass_raw_chi2"),
-        (lambda *args: hh(*args, kind="hh_pt")),
-    ),
-    "deta_hbb_httvis": (
-        hh_args,
-        (lambda *args: hh(*args, kind="deta_hbb_httvis")),
-    ),
-    "dphi_hbb_met": (
-        hh_args,
-        (lambda *args: hh(*args, kind="dphi_hbb_met")),
-    ),
-    "diH_mass_met": (
-        hh_args,
-        (lambda *args: hh(*args, kind="diH_mass_met")),
-    ),
-    # "ditau_deltaR_x_sv_pt":(
-    #     ("ditau_deltaR", "tauH_SVFIT_pt"),
-    #     (lambda a, b: a*b)
-    # ),
+    "etaprod_bb": (
+        ("hasResolvedAK4", "etaprod_bb_nom"),
+        (lambda a, b: a * b)
+    )
 }
 
+
+
 embedding_expected_inputs = {
-    "pairType": [0, 1, 2],
-    "dau1_decayMode": [-1, 0, 1, 10, 11],  # -1 for e/mu
-    "dau2_decayMode": [0, 1, 10, 11],
+    "pairType": [0, 1, 2, 3, 4, 5],
+    "dau1_DM": [-999, 0, 1, 10, 11],  # -1 for e/mu
+    "dau2_DM": [-999, 0, 1, 10, 11],
     "dau1_charge": [-1, 1],
     "dau2_charge": [-1, 1],
     "spin": [0, 2],
-    "year": [0, 1, 2, 3],
-    "isBoosted": [0, 1],
+    "year": [0, 1, 2, 3, 4, 5, 6, 7, 8,],
+    "hasResolvedAK4": [0, 1],
+    "hasBoostedAK8": [0, 1],
+    "hasVBFAK4": [0, 1],
     "pass_pnet": [0, 1],
     "top_mass_idx": [0, 1, 2, 3],
     "has_bjet1": [0, 1],
@@ -1515,6 +1611,26 @@ lbn_sets = {
             None, "met_px", "met_py", None,
             None, "dmet_resp_px", "dmet_resp_py", None,
             None, "dmet_reso_px", "dmet_reso_py", None,
+        ],
+        output_features=["E", "pt", "eta", "m", "pair_cos"],
+        boost_mode="pairs",
+        n_particles=10,
+    ),
+    "vbf": LBNSet(
+        input_features=[
+            "dau1_e", "dau1_px", "dau1_py", "dau1_pz",
+            "dau2_e", "dau2_px", "dau2_py", "dau2_pz",
+            "bjet1_e", "bjet1_px", "bjet1_py", "bjet1_pz",
+            "bjet2_e", "bjet2_px", "bjet2_py", "bjet2_pz",
+            "vbfjet1_e", "vbfjet1_px", "vbfjet1_py", "vbfjet1_pz",
+            "vbfjet2_e", "vbfjet2_px", "vbfjet2_py", "vbfjet2_pz",
+            "fatjet_e", "fatjet_px", "fatjet_py", "fatjet_pz",
+            None, "nu1_px", "nu1_py", "nu1_pz",
+            None, "nu2_px", "nu2_py", "nu2_pz",
+            "htt_regr_e", "htt_regr_px", "htt_regr_py", "htt_regr_pz",
+            "hbb_e", "hbb_px", "hbb_py", "hbb_pz",
+            "htthbb_regr_e", "htthbb_regr_px", "htthbb_regr_py", "htthbb_regr_pz",
+            "httfatjet_regr_e", "httfatjet_regr_px", "httfatjet_regr_py", "httfatjet_regr_pz",
         ],
         output_features=["E", "pt", "eta", "m", "pair_cos"],
         boost_mode="pairs",

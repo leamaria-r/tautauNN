@@ -12,6 +12,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.experimental import numpy as tnp
 from tensorflow.python.keras.engine import compile_utils
+from tensorflow import keras
 from keras.src.utils.io_utils import print_msg
 import sklearn.metrics
 import matplotlib
@@ -30,7 +31,6 @@ def get_device(device: str = "cpu", num_device: int = 0) -> tf.device:
         if gpus:
             selected_gpu = None
             for gpu in gpus:
-                tf.config.experimental.set_memory_growth(gpu, True)
                 if gpu.name.endswith(f":{num_device}"):
                     # tf.config.set_logical_device_configuration(
                     #     gpu,
@@ -131,7 +131,7 @@ class L2Metric(tf.keras.metrics.Metric):
 
     def __init__(
         self,
-        model: tf.keras.Model,
+        model: tf.keras.Model = tf.keras.Sequential(),
         select_layers: Callable[[tf.keras.Model], list[tf.keras.layers.Layer]] | None = None,
         name: str = "l2",
         **kwargs,

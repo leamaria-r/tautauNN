@@ -91,7 +91,7 @@ class MultiDataset(object):
         # start iterating
         while True:
             # determine batch sizes per dataset for this chunk
-            batch_sizes = np.random.multinomial(self.batch_size, self.probs)
+            batch_sizes = np.random.multinomial(self.batch_size, np.abs(self.probs))
 
             # fill chunks per dataset that eventually form a batch
             chunks = []

@@ -15,6 +15,9 @@ from copy import deepcopy
 from typing import Any
 import matplotlib.pyplot as plt
 import shap
+import ternary
+from sklearn.metrics import roc_curve, auc, confusion_matrix, classification_report
+import seaborn as sns
 
 import numpy as np
 import tensorflow as tf
@@ -29,10 +32,11 @@ from tautaunn.tf_util import (
 from tautaunn.util import load_sample_root, calc_new_columns, create_model_name, transform_data_dir_cache, get_indices
 from tautaunn.config import (
     Sample, activation_settings, dynamic_columns, embedding_expected_inputs, regression_sets, cont_feature_sets,
-    cat_feature_sets, lbn_sets,
+    cat_feature_sets, lbn_sets, sample_sets
 )
 from tautaunn.lbn import LBNLayer, LBNInputSelection
-
+from tensorflow.keras import backend as K
+from sklearn.utils.class_weight import compute_class_weight
 
 this_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -56,7 +60,20 @@ data_dirs: dict[str, str] = {
     "2016APV": os.environ["TN_SKIMS_2016APV"],
     "2017": os.environ["TN_SKIMS_2017"],
     "2018": os.environ["TN_SKIMS_2018"],
+    "2022": os.environ["TN_SKIMS_2022"],
+    "2022EE": os.environ["TN_SKIMS_2022EE"],
+    "2023": os.environ["TN_SKIMS_2023"],
+    "2023BPix": os.environ["TN_SKIMS_2023BPix"],
+    "2024": os.environ["TN_SKIMS_2024"]
 }
+precounter_dirs: dict[str, str] = {
+    "2022": os.environ["PRECOUNTER_2022"],
+    "2022EE": os.environ["PRECOUNTER_2022EE"],
+    "2023": os.environ["PRECOUNTER_2023"],
+    "2023BPix": os.environ["PRECOUNTER_2023BPix"],
+    "2024": os.environ["PRECOUNTER_2024"],
+}
+dense_prev: tf.keras.layers.Layer | None = None
 # cache dir for data
 cache_dir: str | None = os.path.join(os.environ["TN_DATA_DIR"], "cache")
 # where tensorboard logs should be written
@@ -79,7 +96,6 @@ if eager_mode:
     # note: running the following with False would still trigger partial eager mode in keras
     tf.config.run_functions_eagerly(eager_mode)
 
-
 def train(
     model_name: str | None = None,
     model_prefix: str = "hbtres",
@@ -92,88 +108,72 @@ def train(
     model_dir: str = model_dir,
     model_fallback_dir: str | None = model_fallback_dir,
     samples: list[Sample] = [
-        Sample("ggF_Radion_m320", year="2017", label=0, spin=0, mass=320.0),
-        Sample("ggF_Radion_m350", year="2017", label=0, spin=0, mass=350.0),
-        Sample("ggF_Radion_m400", year="2017", label=0, spin=0, mass=400.0),
-        Sample("ggF_Radion_m450", year="2017", label=0, spin=0, mass=450.0),
-        Sample("ggF_Radion_m500", year="2017", label=0, spin=0, mass=500.0),
-        Sample("ggF_Radion_m550", year="2017", label=0, spin=0, mass=550.0),
-        Sample("ggF_Radion_m600", year="2017", label=0, spin=0, mass=600.0),
-        Sample("ggF_Radion_m650", year="2017", label=0, spin=0, mass=650.0),
-        Sample("ggF_Radion_m700", year="2017", label=0, spin=0, mass=700.0),
-        Sample("ggF_Radion_m750", year="2017", label=0, spin=0, mass=750.0),
-        Sample("ggF_Radion_m800", year="2017", label=0, spin=0, mass=800.0),
-        Sample("ggF_Radion_m850", year="2017", label=0, spin=0, mass=850.0),
-        Sample("ggF_Radion_m900", year="2017", label=0, spin=0, mass=900.0),
-        Sample("ggF_Radion_m1000", year="2017", label=0, spin=0, mass=1000.0),
-        Sample("ggF_Radion_m1250", year="2017", label=0, spin=0, mass=1250.0),
-        Sample("ggF_Radion_m1500", year="2017", label=0, spin=0, mass=1500.0),
-        Sample("ggF_Radion_m1750", year="2017", label=0, spin=0, mass=1750.0),
-        Sample("ggF_BulkGraviton_m320", year="2017", label=0, spin=2, mass=320.0),
-        Sample("ggF_BulkGraviton_m350", year="2017", label=0, spin=2, mass=350.0),
-        Sample("ggF_BulkGraviton_m400", year="2017", label=0, spin=2, mass=400.0),
-        Sample("ggF_BulkGraviton_m450", year="2017", label=0, spin=2, mass=450.0),
-        Sample("ggF_BulkGraviton_m500", year="2017", label=0, spin=2, mass=500.0),
-        Sample("ggF_BulkGraviton_m550", year="2017", label=0, spin=2, mass=550.0),
-        Sample("ggF_BulkGraviton_m600", year="2017", label=0, spin=2, mass=600.0),
-        Sample("ggF_BulkGraviton_m650", year="2017", label=0, spin=2, mass=650.0),
-        Sample("ggF_BulkGraviton_m700", year="2017", label=0, spin=2, mass=700.0),
-        Sample("ggF_BulkGraviton_m750", year="2017", label=0, spin=2, mass=750.0),
-        Sample("ggF_BulkGraviton_m800", year="2017", label=0, spin=2, mass=800.0),
-        Sample("ggF_BulkGraviton_m850", year="2017", label=0, spin=2, mass=850.0),
-        Sample("ggF_BulkGraviton_m900", year="2017", label=0, spin=2, mass=900.0),
-        Sample("ggF_BulkGraviton_m1000", year="2017", label=0, spin=2, mass=1000.0),
-        Sample("ggF_BulkGraviton_m1250", year="2017", label=0, spin=2, mass=1250.0),
-        Sample("ggF_BulkGraviton_m1500", year="2017", label=0, spin=2, mass=1500.0),
-        Sample("ggF_BulkGraviton_m1750", year="2017", label=0, spin=2, mass=1750.0),
-        Sample("DY_amc_incl", year="2017", label=1),
-        Sample("TT_fullyLep", year="2017", label=1),
-        Sample("TT_semiLep", year="2017", label=1),
+        Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=0, spin=0, mass=250.0),
+        Sample("DYto2L-2Jets_MLL-50_ext1", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        # Sample("DYto2L-2Jets_MLL-50_0J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        Sample("DYto2L-2Jets_MLL-50_1J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        Sample("DYto2L-2Jets_MLL-50_2J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        # Sample("DYto2L-2Jets_MLL-50_PTLL-40to100_1J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        Sample("DYto2L-2Jets_MLL-50_PTLL-40to100_2J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        # Sample("DYto2L-2Jets_MLL-50_PTLL-100to200_1J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        Sample("DYto2L-2Jets_MLL-50_PTLL-100to200_2J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        Sample("DYto2L-2Jets_MLL-50_PTLL-200to400_1J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        Sample("DYto2L-2Jets_MLL-50_PTLL-200to400_2J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        Sample("DYto2L-2Jets_MLL-50_PTLL-400to600_1J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        Sample("DYto2L-2Jets_MLL-50_PTLL-400to600_2J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        Sample("DYto2L-2Jets_MLL-50_PTLL-600_1J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        Sample("DYto2L-2Jets_MLL-50_PTLL-600_2J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        Sample("TTto2L2Nu", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        Sample("TTtoLNu2Q", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        Sample("TTto4Q", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        # Sample("WtoLNu-2Jets", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        # Sample("WtoLNu-2Jets_PTLNu-40to100_1J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        Sample("WtoLNu-2Jets_PTLNu-40to100_2J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        # Sample("WtoLNu-2Jets_PTLNu-100to200_1J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        Sample("WtoLNu-2Jets_PTLNu-100to200_2J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        # Sample("WtoLNu-2Jets_PTLNu-200to400_1J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        Sample("WtoLNu-2Jets_PTLNu-200to400_2J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        # Sample("WtoLNu-2Jets_PTLNu-400to600_1J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        Sample("WtoLNu-2Jets_PTLNu-400to600_2J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        Sample("WtoLNu-2Jets_PTLNu-600_1J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
+        Sample("WtoLNu-2Jets_PTLNu-600_2J", year="2022EE", category="boosted_loose", version="miniProd_25_03", label=1),
     ],
     # names of classes
     class_names: dict[int, str] = {
         0: "HH",
-        1: "Background",
+        1: "Bkg",
     },
     # additional columns to load
     extra_columns: list[str] = [
-        "EventNumber", "MC_weight", "PUReweight",
+        "event", "genWeight", "puWeight",
+        # 'trigSF',"DYstitchWeight", 
+        "idAndIsoAndFakeSF", "bTagweightReshape", "PrescaleWeight_PNetTauTau0p03"
     ],
     # selections to apply before training
     selections: str | list[str] | dict[str, list[str]] = [
         "nbjetscand > 1",
         "nleps == 0",
         "isOS == 1",
-        "dau2_deepTauVsJet >= 5",
+        "PuppiMET_covXX >= 0",
+        "PuppiMET_covYY >= 0",
+        "dau2_tauIdVSjet >= 5",
         (
-            "((pairType == 0) & (dau1_iso < 0.15) & (isLeptrigger == 1)) | "
-            "((pairType == 1) & (dau1_eleMVAiso == 1) & (isLeptrigger == 1)) | "
-            "((pairType == 2) & (dau1_deepTauVsJet >= 5))"
+            "(pairType == 0) | "
+            "(pairType == 1) | "
+            "((pairType == 2) & (dau1_tauIdVSjet >= 5))"
         ),
     ],
     # categorical input features for the network
     cat_input_names: list[str] = [
-        "pairType", "dau1_decayMode", "dau2_decayMode", "dau1_charge", "dau2_charge", "isBoosted", "top_mass_idx",
+        "dau1_DM", "dau2_DM", "dau1_charge", "dau2_charge", "hasBoostedAK8",
     ],
     # continuous input features to the network
     cont_input_names: list[str] = [
-        "met_px", "met_py", "dmet_resp_px", "dmet_resp_py", "dmet_reso_px",
-        "met_cov00", "met_cov01", "met_cov11",
-        "ditau_deltaphi", "ditau_deltaeta",
-        *[
-            f"dau{i}_{feat}"
-            for i in [1, 2]
-            for feat in ["px", "py", "pz", "e", "dxy", "dz", "iso"]
-        ],
-        *[
-            f"bjet{i}_{feat}"
-            for i in [1, 2]
-            for feat in [
-                "px", "py", "pz", "e", "btag_deepFlavor", "cID_deepFlavor", "pnet_bb", "pnet_cc", "pnet_b", "pnet_c",
-                "pnet_g", "pnet_uds", "pnet_pu", "pnet_undef", "HHbtag",
-            ]
-        ],
-        "tauH_SVFIT_mass", "tauH_SVFIT_pt", "top1_mass", "top2_mass", "W_distance", "Z_distance", "H_distance",
+        "dau1_pt", "dau1_eta", "dau2_pt", "dau2_eta",
+        "Htt_svfit_mass", "Htt_svfit_pt", "fatbjet_pt", "fatbjet_msoftdrop",
+        "HH_svfit_mass_msoftdrop", "HH_svfit_pt", "HH_svfit_eta",
+        "Htt_svfit_Hbb_softdrop_deltaEta", "Htt_svfit_Hbb_softdrop_deltaPhi", "dau1_dau2_deltaEta", "dau1_dau2_deltaPhi", 
+        "Hbb_dau1_deltaR", "Hbb_dau2_deltaR"
     ],
     # number of layers and units
     units: list[int] = [128] * 5,
@@ -184,9 +184,9 @@ def train(
     # activation function after each hidden layer
     activation: str = "elu",
     # scale for the l2 loss term (which is already normalized to the number of weights)
-    l2_norm: float = 50.0,
+    l2_norm: float = 500.0,
     # dropout percentage
-    dropout_rate: float = 0.0,
+    dropout_rate: float = 0.3,
     # batch norm between layers
     batch_norm: bool = True,
     # batch size
@@ -196,23 +196,23 @@ def train(
     # name of the optimizer to use
     optimizer: str = "adam",
     # learning rate to start with
-    learning_rate: float = 3e-3,
+    learning_rate: float = 1e-3,
     # half the learning rate if the validation loss hasn't improved in this many validation steps
-    learning_rate_patience: int = 8,
+    learning_rate_patience: int = 10,
     # stop training if the validation loss hasn't improved since this many validation steps
-    early_stopping_patience: int = 10,
+    early_stopping_patience: int = 15,
     # whether or not to use cyclical learning rate with default settings
     cycle_lr: bool = False,
     # maximum number of epochs to even cap early stopping
     max_epochs: int = 10000,
     # how frequently to calulcate the validation loss
-    validate_every: int = 500,
+    validate_every: int = 1200,
     # add the year of the sample as a categorical input
-    parameterize_year: bool = True,
+    parameterize_year: bool = False,
     # add the generator spin for the signal samples as categorical input -> network parameterized in spin
-    parameterize_spin: bool = True,
+    parameterize_spin: bool = False,
     # add the generator mass for the signal samples as continuous input -> network parameterized in mass
-    parameterize_mass: bool = True,
+    parameterize_mass: bool = False,
     # the name of a regression config set to use
     regression_set: str | None = None,
     # the name of the lbn set to use
@@ -227,6 +227,16 @@ def train(
     seed: int | None = None,
     # whether to skip shap plot production
     skip_shap_plots: bool = False,
+    # whether to plot loss
+    plot_loss: bool = True,
+    # whether to plot ternary plot
+    plot_ternary: bool = False,
+    # whether to plot ROC curve
+    plot_roc: bool = True,
+    # whether to plot confusion matrix
+    plot_cm: bool = True,
+    # whether to save history
+    save_history: bool = True,
 ) -> tuple[tf.keras.Model, str] | None:
     # some checks
     assert units
@@ -423,6 +433,7 @@ def train(
         for sample in samples:
             rec = load_sample_root(
                 data_dirs[sample.year],
+                precounter_dirs[sample.year],
                 sample,
                 list(columns_to_read),
                 selections[sample.year],
@@ -460,12 +471,17 @@ def train(
                 )
 
             # lookup all number of events used during training using event number and fold indices
-            last_digit = rec["EventNumber"] % n_folds
+            last_digit = rec["event"] % n_folds
             all_train_indices = np.where(np.any(last_digit[..., None] == train_fold_indices, axis=1))[0]
             # randomly split according to validation_fraction into actual training and validation indices
+            val_frac_set = validation_fraction
+            if len(all_train_indices) < 2:
+                continue
+            if len(all_train_indices) < 4:
+                val_frac_set = 0.5
             valid_indices = np.random.choice(
                 all_train_indices,
-                size=int(len(all_train_indices) * validation_fraction),
+                size=int(len(all_train_indices) *  val_frac_set),
                 replace=False,
             )
             train_indices = np.setdiff1d(all_train_indices, valid_indices)
@@ -485,7 +501,7 @@ def train(
             event_weights_valid.append(event_weights[valid_indices][..., None])
 
             # store the yield factor for later use
-            yield_factors[sample.name] = (rec["PUReweight"] * rec["MC_weight"] / rec["sum_weights"]).sum()
+            yield_factors[sample.name] = np.abs((rec["puWeight"] * rec["genWeight"] / rec["sum_weights"]).sum())
 
         if cache_dir:
             # cache data
@@ -509,14 +525,14 @@ def train(
     # and that samples within a class are weighted according to their yield
     batch_weights: list[float] = []
     for label, _samples in labels_to_samples.items():
-        if label == 0:
+        if label == 0 or label == 3:
             # signal samples are to be drawn equally often
             batch_weights += [1 / len(_samples)] * len(_samples)
         else:
             # repeat backgrounds according to their yield in that class
-            sum_yield_factors = sum(yield_factors[sample] for sample in _samples)
+            sum_yield_factors = sum(yield_factors[sample] if sample in yield_factors else 0. for sample in _samples)
             for sample in _samples:
-                batch_weights.append(yield_factors[sample] / sum_yield_factors)
+                batch_weights.append((yield_factors[sample] if sample in yield_factors else 0.) / sum_yield_factors)
 
     # compute weights to be applied to validation events to resemble the batch composition seen during training
     n_events_valid = list(map(len, event_weights_valid))
@@ -690,6 +706,7 @@ def train(
             "adam": tf.keras.optimizers.Adam,
             "adamw": tf.keras.optimizers.AdamW,
         }[optimizer]
+
         model.compile(
             loss="categorical_crossentropy",
             optimizer=opt_cls(
@@ -706,6 +723,16 @@ def train(
                     select_layers=(lambda model: model.l2_layers["main"]),
                     name="l2",
                 ),
+                tf.keras.metrics.AUC(
+                    num_thresholds=200,
+                    curve='ROC',
+                    summation_method='interpolation',
+                    name="AUC",
+                    thresholds=None,
+                    multi_label=True,
+                    num_labels=n_classes,
+                    from_logits=False
+                )
             ],
             jit_compile=jit_compile,
             run_eagerly=eager_mode,
@@ -890,7 +917,7 @@ def train(
         # training
         t_start = time.perf_counter()
         try:
-            model.fit(
+            history = model.fit(
                 x=dataset_train.create_keras_generator(input_names=["cont_input", "cat_input"]),
                 validation_data=dataset_valid.create_keras_generator(input_names=["cont_input", "cat_input"]),
                 shuffle=False,  # the custom generators already shuffle
@@ -962,6 +989,16 @@ def train(
                             select_layers=(lambda model: model.l2_layers["main"] + model.l2_layers["reg"]),
                             name="l2",
                         ),
+                        tf.keras.metrics.AUC(
+                            num_thresholds=200,
+                            curve='ROC',
+                            summation_method='interpolation',
+                            name="AUC",
+                            thresholds=None,
+                            multi_label=True,
+                            num_labels=n_classes,
+                            from_logits=False
+                        )
                     ],
                     jit_compile=jit_compile,
                     run_eagerly=eager_mode,
@@ -973,7 +1010,7 @@ def train(
 
                 print(f"\nenabled fine-tuning of {reg_model.name} layers")
 
-                model.fit(
+                history = model.fit(
                     x=dataset_train.create_keras_generator(input_names=["cont_input", "cat_input"]),
                     validation_data=dataset_valid.create_keras_generator(input_names=["cont_input", "cat_input"]),
                     shuffle=False,  # the custom generators already shuffle
@@ -1012,6 +1049,140 @@ def train(
             steps=dataset_valid.batches_per_cycle,
             return_dict=True,
         )
+
+        if plot_cm or plot_roc:
+            y_true_list = []
+            y_pred_list = []
+            s = 0
+            i = 0
+
+            for batch in dataset_valid.create_keras_generator(input_names=["cont_input", "cat_input"]):
+                pred = model.predict(batch[0])
+                y_true_list.append(batch[1])
+                y_pred_list.append(pred)
+                if s > len(batch[1]) or i > 5:
+                    break
+                s = len(batch[1])
+                i += 1
+
+            y_true = np.concatenate(y_true_list, axis=0)
+            y_pred = np.concatenate(y_pred_list, axis=0)
+        
+
+        if not os.path.exists(model_dir):
+            print(model_dir)
+            os.makedirs(model_dir)
+
+        if save_history:
+            try:
+                with open(os.path.join(model_dir, 'training_history.json'), 'w') as f:
+                    json.dump(history.history, f)
+            except Exception as e:
+                print("No history saved due to exception: ", e)
+
+        if plot_roc:
+            try:
+                fpr = [i for i in range(n_classes)]
+                tpr = [i for i in range(n_classes)]
+                roc_auc = [i for i in range(n_classes)]
+                colors = ['blue', 'red', 'green', 'purple', 'orange', 'brown']
+                cats = ["ggHH", "TT", "DY", "qqHH"]
+                
+                for i in range(n_classes):
+                    fpr[i], tpr[i], _ = roc_curve(y_true[:, i], y_pred[:, i])
+                    roc_auc[i] = auc(fpr[i], tpr[i])
+
+                plt.figure(figsize=(8, 6))
+
+                for i, color in zip(range(n_classes), colors):
+                    plt.plot(fpr[i], tpr[i], color=color, lw=2,
+                    label=f'Class {cats[i]} (AUC = {roc_auc[i]:.2f})')
+
+                # plt.clf()
+                # plt.plot(fpr, tpr, color='blue', lw=2, label=f'ROC Curve (AUC = {roc_auc:.2f})')
+                plt.plot([0, 1], [0, 1], color='gray', linestyle='--')  # Diagonal line
+                plt.xlim([0.0, 1.0])
+                plt.ylim([0.0, 1.05])
+                plt.xlabel('False Positive Rate')
+                plt.ylabel('True Positive Rate')
+                plt.title('ROC Curve')
+                plt.legend(loc='lower right')
+                plt.savefig(os.path.join(model_dir, 'auc.png'))
+
+            except Exception as e:
+                print("No plot saved due to exception: ", e)
+
+        if plot_cm:
+            try: 
+                y_pred_classes = np.argmax(y_pred, axis=1)
+                y_true_classes = np.argmax(y_true, axis=1)
+                # Classification report
+                print("\nClassification Report:\n")
+                print(classification_report(y_true_classes, y_pred_classes))
+                plt.clf()
+                conf_matrix = confusion_matrix(y_true_classes, y_pred_classes)
+                # Normalise
+                cmrow = conf_matrix.astype('float') / conf_matrix.sum(axis=1)[:, np.newaxis]
+                plt.figure(figsize=(10, 8))
+                sns.heatmap(cmrow, annot=True, fmt='.2f', cmap='Blues', xticklabels=["ggHH", "TT", "DY", "qqHH"], yticklabels=["ggHH", "TT", "DY", "qqHH"])
+                plt.xlabel('Predicted Label')
+                plt.ylabel('True Label')
+                plt.title('Confusion Matrix')
+                plt.savefig(os.path.join(model_dir, 'confusion_matrix_row_normalized.png'))
+
+                plt.clf()
+                cmcol = conf_matrix.astype('float') / conf_matrix.sum(axis=0)[np.newaxis, :]
+                plt.figure(figsize=(10, 8))
+                sns.heatmap(cmcol, annot=True, fmt='.2f', cmap='Blues', xticklabels=["ggHH", "TT", "DY", "qqHH"], yticklabels=["ggHH", "TT", "DY", "qqHH"])
+                plt.xlabel('Predicted Label')
+                plt.ylabel('True Label')
+                plt.title('Confusion Matrix')
+                plt.savefig(os.path.join(model_dir, 'confusion_matrix_col_normalized.png'))
+            
+            except Exception as e:
+                print("No plot saved due to exception: ", e)
+            
+        if plot_ternary:
+            try:
+                plt.clf()
+                HH_like_events = y_pred[y_true[:, 0] == 1]
+                DY_like_events = y_pred[y_true[:, 1] == 1]
+                # TT_like_events = y_pred[y_true[:, 2] == 1]
+
+                HH_like_events = HH_like_events / HH_like_events.sum(axis=1)[:, None]
+                DY_like_events = DY_like_events / DY_like_events.sum(axis=1)[:, None]
+                TT_like_events = TT_like_events / TT_like_events.sum(axis=1)[:, None]
+                fig, ax = plt.subplots(figsize=(8, 8))
+                ternary_ax = ternary.TernaryAxesSubplot(scale=1, ax=ax)
+                ternary_ax.boundary()
+                ternary_ax.gridlines(multiple=0.2, color="gray", linestyle="dotted")
+                ternary_ax.scatter(HH_like_events, marker="o", s=10, color="red", alpha=0.5)
+                ternary_ax.scatter(DY_like_events, marker="o", s=10, color="green", alpha=0.5)
+                ternary_ax.scatter(TT_like_events, marker="o", s=10, color="blue", alpha=0.5)
+                ternary_ax.ticks(axis='lbr', multiple=0.2, fontsize=15, linewidth=1, tick_formats="%.1f", offset=0.015)
+                ternary_ax.bottom_axis_label("HH score (x-axis)", color="black", fontsize=20, offset=-0.02)
+                ternary_ax.right_axis_label("DY score (y-axis)", color="black", fontsize=20, offset=0.12)
+                ternary_ax.left_axis_label("TT score (z-axis)", color="black", fontsize=20, offset=0.12)
+                ternary_ax.set_axis_limits({'b': (0, 1), 'l': (0, 1), 'r': (0, 1)})
+                ternary_ax.get_axes().axis('off')
+                ternary_ax.clear_matplotlib_ticks()
+                plt.tight_layout()
+                plt.savefig(os.path.join(model_dir, 'ternary.png'))
+            except Exception as e:
+                print("No plot saved due to exception: ", e)
+
+        if plot_loss:
+            try:
+                plt.clf()
+                plt.plot(history.history['loss'], label='Train Loss')
+                plt.plot(history.history['val_loss'], label='Validation Loss')
+                plt.title('Training History')
+                plt.xlabel('Epochs')
+                plt.ylabel('Loss')
+                plt.legend()
+                plt.savefig(os.path.join(model_dir, 'loss.png'))
+            except Exception as e:
+                print("No plot save due to exception: ", e)
 
         # model saving
         def save_model(path):
@@ -1105,7 +1276,7 @@ def train(
 
         def caller(X, model=model, n_cont=len(cont_input_names)):
             X_cont, X_cat = X[:, :n_cont], X[:, n_cont:]
-            return model([X_cont, X_cat], weights=event_weights_val, training=False)
+            return model([X_cont, X_cat], training=False)
 
         explainer = shap.explainers.Permutation(caller, x_val, feature_names=feature_names)
         shap_values = explainer(x_val)
@@ -1157,7 +1328,7 @@ def create_model(
     activation: str,
     batch_norm: bool,
     l2_norm: float,
-    dropout_rate: float,
+    dropout_rate: float
 ):
     """
     ResNet: https://arxiv.org/pdf/1512.03385.pdf

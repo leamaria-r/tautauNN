@@ -81,6 +81,15 @@ def export_ensemble(
             include_optimizer=False,
         )
 
+        keras_path = os.path.join(ensemble_dir, "model.keras")
+        if os.path.exists(keras_path):
+            os.remove(keras_path)
+        ensemble_model.save(
+            keras_path,
+            overwrite=True,
+            save_format="keras",
+        )
+
         # also save a frozen version for use in c++
         cmsml.tensorflow.save_frozen_graph(
             os.path.join(ensemble_dir, "frozen.pb"),

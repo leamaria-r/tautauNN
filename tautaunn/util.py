@@ -12,6 +12,7 @@ import pickle
 import inspect
 import fnmatch
 import itertools
+import json
 from multiprocessing import Pool as ProcessPool
 from typing import Any
 
@@ -35,33 +36,43 @@ def _load_root_file_impl(
     file_name: str,
     features: list[str],
     selections: str,
+    precounter_json_name: str =""
 ) -> tuple[np.recarray, float, str] | str:
-    from tautaunn.config import klub_aliases
-
+    from tautaunn.config import cclub_aliases
     # remove year_flag if requested since it is stored based on the sample data
     features = [f for f in features if f != "year_flag"]
+    # print(precounter_json_name, file_name)
+    with open(precounter_json_name) as json_data:
+        d = json.load(json_data)
+        json_data.close()
+        if "nweightedevents" not in d:
+            return file_name
 
     with uproot.open(file_name) as f:
-        if "HTauTauTree" not in f or "h_eff" not in f:
+        if "Events" not in f:
             return file_name
-        tree = f["HTauTauTree"]
-        ak_array = tree.arrays(features, cut=selections, aliases=klub_aliases, library="ak")
-        ak_array = ak.with_field(ak_array, sample.year_flag, "year_flag")
-        ak_array = ak.with_field(ak_array, 1.0, "sum_weights")
-        rec = ak_array.to_numpy()
-        return rec, f["h_eff"].values()[0], file_name
+        tree = f["Events"]
+        if len(tree.items()):
+            ak_array = tree.arrays(features, cut=selections, aliases=cclub_aliases, library="ak")
+            ak_array = ak.with_field(ak_array, sample.year_flag, "year_flag")
+            ak_array = ak.with_field(ak_array, 1.0, "sum_weights")
+            rec = ak_array.to_numpy()
+            # print(features)
+        else:
+            rec = np.array([])
+        return rec, d["nweightedevents"], file_name
 
 
 def _load_root_file_impl_mp(args):
     return _load_root_file_impl(*args)
 
 
-def load_sample_root(data_dir, sample, features, selections, max_events=-1, cache_dir=None, n_threads=4):
+def load_sample_root(data_dir, precounter_dir, sample, features, selections, max_events=-1, cache_dir=None, n_threads=4):
     print(f"loading sample {sample.skim_name} ... ", end="", flush=True)
 
     # potentially read from cache
     cache_path = get_cache_path(cache_dir, data_dir, sample, features, selections, max_events)
-    if cache_path and os.path.exists(cache_path):
+    if False and cache_path and os.path.exists(cache_path):
         with open(cache_path, "rb") as f:
             feature_vecs = pickle.load(f)
         print(f"loaded {len(feature_vecs):_} events from cache")
@@ -71,11 +82,15 @@ def load_sample_root(data_dir, sample, features, selections, max_events=-1, cach
         n_events = 0
         sum_weights = 0.0
         broken_files = []
-        file_names = glob.glob(f"{data_dir}/{sample.directory_name}/output_*.root")
-
+        file_names = glob.glob(f"{data_dir}/{sample.directory_name}/cat_{sample.category}/{sample.version}/data_[0-9]*.root")
+        if "2024" in precounter_dir:
+            precounters = glob.glob(f"{precounter_dir}/{sample.directory_name}/CentralNANOv15/data_[0-9]*.json")
+        else:
+            precounters = glob.glob(f"{precounter_dir}/{sample.directory_name}/HLepRare_skims_2025v1/data_[0-9]*.json")
         # load files in parallel
         n_files_seen = 0
-        pool_args = [(sample, file_name, features, selections) for file_name in file_names]
+        # print(file_names)
+        pool_args = [(sample, file_name, features, selections, precounter_name) for (file_name, precounter_name) in list(zip(file_names,precounters))]
         t0 = time.perf_counter()
         with ProcessPool(n_threads) as pool:
             for result in pool.imap(_load_root_file_impl_mp, pool_args):
@@ -84,7 +99,8 @@ def load_sample_root(data_dir, sample, features, selections, max_events=-1, cach
                     broken_files.append(result)
                     continue
                 rec, file_sum_weights, _ = result
-                feature_vecs.append(rec)
+                if len(rec):
+                    feature_vecs.append(rec)
                 n_events += len(rec)
                 sum_weights += file_sum_weights
                 if max_events > 0 and n_events > max_events:
