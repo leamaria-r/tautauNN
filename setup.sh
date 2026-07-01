@@ -66,6 +66,16 @@ action() {
         export TN_SKIMS_2016="/eos/user/l/lportale/hhbbtautau/skims/SKIMS_UL16"
         export TN_SKIMS_2017="/eos/user/l/lportale/hhbbtautau/skims/SKIMS_UL17"
         export TN_SKIMS_2018="/eos/user/l/lportale/hhbbtautau/skims/SKIMS_UL18"
+        export TN_SKIMS_2022="/eos/cms/store/group/phys_higgs/HHbbtautau/MergeCategorization/run3_2022_preEE"
+        export TN_SKIMS_2022EE="/eos/cms/store/group/phys_higgs/HHbbtautau/MergeCategorization/run3_2022_postEE"
+        export TN_SKIMS_2023="/eos/cms/store/group/phys_higgs/HHbbtautau/MergeCategorization/run3_2023_preBPix"
+        export TN_SKIMS_2023BPix="/eos/cms/store/group/phys_higgs/HHbbtautau/MergeCategorization/run3_2023_postBPix"
+        export TN_SKIMS_2024="/eos/cms/store/group/phys_higgs/HHbbtautau/MergeCategorization/run3_2024_fullYear"
+        export PRECOUNTER_2022="/eos/cms/store/group/phys_higgs/HHbbtautau/PreCounter/run3_2022_preEE"
+        export PRECOUNTER_2022EE="/eos/cms/store/group/phys_higgs/HHbbtautau/PreCounter/run3_2022_postEE"
+        export PRECOUNTER_2023="/eos/cms/store/group/phys_higgs/HHbbtautau/PreCounter/run3_2023_preBPix"
+        export PRECOUNTER_2023BPix="/eos/cms/store/group/phys_higgs/HHbbtautau/PreCounter/run3_2023_postBPix"
+        export PRECOUNTER_2024="/eos/cms/store/group/phys_higgs/HHbbtautau/PreCounter/run3_2024_fullYear"
         export TN_HTCONDOR_FLAVOR="cern"
         host_matched="true"
     fi
@@ -163,7 +173,7 @@ EOF
         micromamba clean --yes --all
 
         # pip packages
-        pip install --no-cache-dir -U pip setuptools wheel
+        pip install --no-cache-dir -U "pip<23.1" setuptools wheel
         pip install --no-cache-dir -U \
             "ipython" \
             "notebook" \
@@ -189,6 +199,8 @@ EOF
             "vector" \
             "shap" \
             "uniplot" \
+            "ternary" \
+            "seaborn" \
             "git+https://github.com/riga/law.git@master" \
             || return "$?"
     fi
