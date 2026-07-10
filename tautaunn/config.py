@@ -597,50 +597,50 @@ sample_sets = {
         Sample("TTtoLNu2Q", year="2023BPix", category="res[1,2]b", version="Prod_26_03", label=1),
         Sample("TTto4Q", year="2023BPix", category="res[1,2]b", version="Prod_26_03", label=1),
         # boosted
-        Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2022EE", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
-        Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2022EE", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
-        Sample("ggHH_kl_2p45_kt_1_c2_0_hbbhtt", year="2022EE", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
-        Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2022EE", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
-        Sample("DYto2[E,M]*", year="2022EE", category="boosted", version="Prod_26_03", label=2),
-        Sample("DYto2Tau-2Jets_MLL-50_0J", year="2022EE", category="boosted", version="Prod_26_03", label=2),
-        Sample("DYto2Tau-2Jets_MLL-50_1J", year="2022EE", category="boosted", version="Prod_26_03", label=2),
-        Sample("DYto2Tau-2Jets_MLL-50_2J", year="2022EE", category="boosted", version="Prod_26_03", label=2),
-        Sample("TTto2L2Nu", year="2022EE", category="boosted", version="Prod_26_03", label=1),
-        Sample("TTtoLNu2Q", year="2022EE", category="boosted", version="Prod_26_03", label=1),
-        Sample("TTto4Q", year="2022EE", category="boosted", version="Prod_26_03", label=1),
-        Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2022", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
-        Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2022", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
-        Sample("ggHH_kl_2p45_kt_1_c2_0_hbbhtt", year="2022", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
-        Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2022", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
-        Sample("DYto2[E,M]*", year="2022", category="boosted", version="Prod_26_03", label=2),
-        Sample("DYto2Tau-2Jets_MLL-50_0J", year="2022", category="boosted", version="Prod_26_03", label=2),
-        Sample("DYto2Tau-2Jets_MLL-50_1J", year="2022", category="boosted", version="Prod_26_03", label=2),
-        Sample("DYto2Tau-2Jets_MLL-50_2J", year="2022", category="boosted", version="Prod_26_03", label=2),
-        Sample("TTto2L2Nu", year="2022", category="boosted", version="Prod_26_03", label=1),
-        Sample("TTtoLNu2Q", year="2022", category="boosted", version="Prod_26_03", label=1),
-        Sample("TTto4Q", year="2022", category="boosted", version="Prod_26_03", label=1),
-        Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2023", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
-        Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2023", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
-        Sample("ggHH_kl_2p45_kt_1_c2_0_hbbhtt", year="2023", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
-        Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2023", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
-        Sample("DYto2[E,M]*", year="2023", category="boosted", version="Prod_26_03", label=2),
-        Sample("DYto2Tau-2Jets_MLL-50_0J", year="2023", category="boosted", version="Prod_26_03", label=2),
-        Sample("DYto2Tau-2Jets_MLL-50_1J", year="2023", category="boosted", version="Prod_26_03", label=2),
-        Sample("DYto2Tau-2Jets_MLL-50_2J", year="2023", category="boosted", version="Prod_26_03", label=2),
-        Sample("TTto2L2Nu", year="2023", category="boosted", version="Prod_26_03", label=1),
-        Sample("TTtoLNu2Q", year="2023", category="boosted", version="Prod_26_03", label=1),
-        Sample("TTto4Q", year="2023", category="boosted", version="Prod_26_03", label=1),
-        Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2023BPix", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
-        Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2023BPix", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
-        Sample("ggHH_kl_2p45_kt_1_c2_0_hbbhtt", year="2023BPix", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
-        Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2023BPix", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
-        Sample("DYto2[E,M]*", year="2023BPix", category="boosted", version="Prod_26_03", label=2),
-        Sample("DYto2Tau-2Jets_MLL-50_0J", year="2023BPix", category="boosted", version="Prod_26_03", label=2),
-        Sample("DYto2Tau-2Jets_MLL-50_1J", year="2023BPix", category="boosted", version="Prod_26_03", label=2),
-        Sample("DYto2Tau-2Jets_MLL-50_2J", year="2023BPix", category="boosted", version="Prod_26_03", label=2),
-        Sample("TTto2L2Nu", year="2023BPix", category="boosted", version="Prod_26_03", label=1),
-        Sample("TTtoLNu2Q", year="2023BPix", category="boosted", version="Prod_26_03", label=1),
-        Sample("TTto4Q", year="2023BPix", category="boosted", version="Prod_26_03", label=1),
+    #     Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2022EE", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
+    #     Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2022EE", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
+    #     Sample("ggHH_kl_2p45_kt_1_c2_0_hbbhtt", year="2022EE", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
+    #     Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2022EE", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
+    #     Sample("DYto2[E,M]*", year="2022EE", category="boosted", version="Prod_26_03", label=2),
+    #     #Sample("DYto2Tau-2Jets_MLL-50_0J", year="2022EE", category="boosted", version="Prod_26_03", label=2),
+    #     Sample("DYto2Tau-2Jets_MLL-50_1J", year="2022EE", category="boosted", version="Prod_26_03", label=2),
+    #     Sample("DYto2Tau-2Jets_MLL-50_2J", year="2022EE", category="boosted", version="Prod_26_03", label=2),
+    #     Sample("TTto2L2Nu", year="2022EE", category="boosted", version="Prod_26_03", label=1),
+    #     Sample("TTtoLNu2Q", year="2022EE", category="boosted", version="Prod_26_03", label=1),
+    #     Sample("TTto4Q", year="2022EE", category="boosted", version="Prod_26_03", label=1),
+    #     Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2022", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
+    #     Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2022", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
+    #     Sample("ggHH_kl_2p45_kt_1_c2_0_hbbhtt", year="2022", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
+    #     Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2022", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
+    #     Sample("DYto2[E,M]*", year="2022", category="boosted", version="Prod_26_03", label=2),
+    #     #Sample("DYto2Tau-2Jets_MLL-50_0J", year="2022", category="boosted", version="Prod_26_03", label=2),
+    #     Sample("DYto2Tau-2Jets_MLL-50_1J", year="2022", category="boosted", version="Prod_26_03", label=2),
+    #     Sample("DYto2Tau-2Jets_MLL-50_2J", year="2022", category="boosted", version="Prod_26_03", label=2),
+    #     Sample("TTto2L2Nu", year="2022", category="boosted", version="Prod_26_03", label=1),
+    #     Sample("TTtoLNu2Q", year="2022", category="boosted", version="Prod_26_03", label=1),
+    #     Sample("TTto4Q", year="2022", category="boosted", version="Prod_26_03", label=1),
+    #     Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2023", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
+    #     Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2023", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
+    #     Sample("ggHH_kl_2p45_kt_1_c2_0_hbbhtt", year="2023", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
+    #     Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2023", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
+    #     Sample("DYto2[E,M]*", year="2023", category="boosted", version="Prod_26_03", label=2),
+    #     #Sample("DYto2Tau-2Jets_MLL-50_0J", year="2023", category="boosted", version="Prod_26_03", label=2),
+    #     Sample("DYto2Tau-2Jets_MLL-50_1J", year="2023", category="boosted", version="Prod_26_03", label=2),
+    #     Sample("DYto2Tau-2Jets_MLL-50_2J", year="2023", category="boosted", version="Prod_26_03", label=2),
+    #     Sample("TTto2L2Nu", year="2023", category="boosted", version="Prod_26_03", label=1),
+    #     Sample("TTtoLNu2Q", year="2023", category="boosted", version="Prod_26_03", label=1),
+    #     Sample("TTto4Q", year="2023", category="boosted", version="Prod_26_03", label=1),
+    #     Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2023BPix", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
+    #     Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2023BPix", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
+    #     Sample("ggHH_kl_2p45_kt_1_c2_0_hbbhtt", year="2023BPix", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
+    #     Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2023BPix", category="boosted", version="Prod_26_03", label=0, spin=0, mass=250.0),
+    #     Sample("DYto2[E,M]*", year="2023BPix", category="boosted", version="Prod_26_03", label=2),
+    #     #Sample("DYto2Tau-2Jets_MLL-50_0J", year="2023BPix", category="boosted", version="Prod_26_03", label=2),
+    #     Sample("DYto2Tau-2Jets_MLL-50_1J", year="2023BPix", category="boosted", version="Prod_26_03", label=2),
+    #     Sample("DYto2Tau-2Jets_MLL-50_2J", year="2023BPix", category="boosted", version="Prod_26_03", label=2),
+    #     Sample("TTto2L2Nu", year="2023BPix", category="boosted", version="Prod_26_03", label=1),
+    #     Sample("TTtoLNu2Q", year="2023BPix", category="boosted", version="Prod_26_03", label=1),
+    #     Sample("TTto4Q", year="2023BPix", category="boosted", version="Prod_26_03", label=1),
     ],
     "ggf_2024": [
         #res1-2b
@@ -769,7 +769,7 @@ cont_feature_sets = {
     "reg_reduced_cid": (cont_features_reg_reduced_cid := with_features(
         cont_features_reg_reduced,
         remove=["bjet*_cID_deepFlavor"],
-        add=["bjet1_CvsL", "bjet1_CvsB", "bjet2_CvsL", "bjet2_CvsB"],
+        add=["bjet1_PNetCvL", "bjet1_PNetCvB", "bjet2_PNetCvL", "bjet2_PNetCvB"],
     )),
     "reg_reduced_cid_pnet": [
         "met_et", "met_cov00", "met_cov01", "met_cov11",
@@ -820,7 +820,7 @@ cont_feature_sets = {
             for i in [1, 2]
             for feat in [
                 "px", "py", "pz", "e",
-                "btag_deepFlavor", "cID_deepFlavor", "CvsB", "CvsL",
+                "btag_DeepFlavB", "cID_deepFlavor", "PNetCvB", "PNetCvL",
                 "HHbtag",
             ]
         ],
@@ -838,14 +838,15 @@ cont_feature_sets = {
             for i in [1, 2]
             for feat in [
                 "px", "py", "pz", "e",
-                "btag_deepFlavor", "CvsB", "CvsL",
+                "btagDeepFlavB", "PNetCvB", "PNetCvL",
                 "HHbtag",
             ]
         ],
         *[
             f"fatjet_masked_{feat}"
+            #f"fatjet_{feat}"
             for feat in [
-                "px", "py", "pz", "e",
+                 "e", "px", "py", "pz",
             ]
         ],
     ]),
@@ -1024,7 +1025,7 @@ cat_feature_sets = {
         "has_bjet_pair",
     ],
     "full": (cat_features_full := [
-        "pairType", "dau1_DM", "dau2_DM", "dau1_charge", "dau2_charge", "isBoosted", "top_mass_idx",
+        "pairType", "dau1_DM", "dau2_DM", "dau1_charge", "dau2_charge", "hasBoostedAK8",# "top_mass_idx",
     ]),
     "class": [
         "isBoosted", "pairType", "has_vbf_pair",
@@ -1041,20 +1042,20 @@ cat_feature_sets = {
 # (in the latter case, the training script will choose the year automatically based on the sample)
 selection_sets = {
     "baseline": (baseline_selection := [
-        "nbjetscand > 1",
-        "nleps == 0",
+        "n_btagged_jets > 1",
+       # "nleps == 0",
         "isOS == 1",
         "PuppiMET_covXX >= 0",
         "PuppiMET_covYY >= 0",
-        # "fwMoment_eta_2 >= -1", 
-        # "fwMoment_eta_2 < 100",
-        # "relHtt_pt_mass < 100000", "relHbb_pt_mass < 100000",
-        # "dau2_tauIdVSjet >= 5",
+        # # "fwMoment_eta_2 >= -1", 
+        # # "fwMoment_eta_2 < 100",
+        # # "relHtt_pt_mass < 100000", "relHbb_pt_mass < 100000",
+        # # "dau2_tauIdVSjet >= 5",
         (
-            "((pairType == 0) & (dau2_tauIdVSjet >= 5)) | "
-            "((pairType == 1) & (dau2_tauIdVSjet >= 5)) | "
-            "((pairType == 2) & (dau2_tauIdVSjet >= 5) & (dau1_tauIdVSjet >= 5)) | "
-            "((pairType == 6) & (dau2_tauIdVSjet >= 0.984) & (dau1_tauIdVSjet >= 0.984) & deltaRtautau > 0.05)"
+        "((pairType == 0) & (dau2_tauIdVSjet >= 5)) | "
+        "((pairType == 1) & (dau2_tauIdVSjet >= 5)) | "
+        "((pairType == 2) & (dau2_tauIdVSjet >= 5) & (dau1_tauIdVSjet >= 5)) | "
+        "((pairType == 6) & (dau2_tauIdVSjet >= 0.984) & (dau1_tauIdVSjet >= 0.984) & (deltaRtautau > 0.05))"
         ),
     ]),
     "baseline_boosted": (baseline_selection := [
@@ -1083,10 +1084,10 @@ selection_sets = {
         for year, w in btag_wps.items()
     },
     "new_baseline": [
-        "nleps == 0",
+        #"nleps == 0",
         "isOS == 1",
         "dau2_deepTauVsJet >= 5",
-        "((nbjetscand > 1) | (isBoosted == 1))",
+        "((n_btagged_jets > 1) | (isBoosted == 1))",
         "((isLeptrigger == 1) | (isMETtrigger == 1) | (isSingleTautrigger == 1))",
         (
             "((pairType == 0) & (dau1_iso < 0.15)) | "
@@ -1143,8 +1144,8 @@ cclub_aliases: dict[str, str] = {
     "met_cov00": "PuppiMET_covXX",
     "met_cov01": "PuppiMET_covXY",
     "met_cov11": "PuppiMET_covYY",
-    "met_px": "puppimet_smeared_px",
-    "met_py": "puppimet_smeared_py",
+    #"met_px": "puppimet_smeared_px",
+    #"met_py": "puppimet_smeared_py",
     "VBFjj_deltaEta": "VBFjj_deltaEta_nom",
     "VBFjj_mass": "VBFjj_mass_nom",
     "VBFdeltaR":"VBFdeltaR_nom",
@@ -1206,7 +1207,7 @@ klub_category_columns = [
     "pairType",
     "nleps",
     "isOS",
-    "nbjetscand",
+    "n_btagged_jets",
     "bjet1_bID_deepFlavor",
     "bjet2_bID_deepFlavor",
     "isBoosted",
@@ -1426,27 +1427,131 @@ dynamic_columns = {
     "etaprod_bb": (
         ("hasResolvedAK4", "etaprod_bb_nom"),
         (lambda a, b: a * b)
+    ),
+    "met_dphi": (
+        ("PuppiMET_phi", rot_phi),
+        (lambda a, b: phi_mpi_to_pi(a - b)),
+    ),
+    "met_px": (
+        ("PuppiMET_pt", "met_dphi"),
+        (lambda a, b: a * np.cos(b)),
+    ),
+    "met_py": (
+        ("PuppiMET_pt", "met_dphi"),
+        (lambda a, b: a * np.sin(b)),
+    ),
+    # "mask_fatbjet":(
+    #     ("fatbjet_pt_nom"),
+    #     (lambda a: a>0)
+    # ),
+    "fatjet_masked_e":(
+        ("fatjet_e", "fatbjet_pt_nom"),
+        (lambda a, b: a * (b>0))
+    ),
+    "fatjet_masked_px":(
+        ("fatjet_px", "fatbjet_pt_nom"),
+        (lambda a, b: a * (b>0))
+    ),
+    "fatjet_masked_py":(
+        ("fatjet_py", "fatbjet_pt_nom"),
+        (lambda a, b: a * (b>0))
+    ),
+    "fatjet_masked_pz":(
+        ("fatjet_pz", "fatbjet_pt_nom"),
+        (lambda a, b: a * (b>0))
+    ),
+    # "mask_bjet1":(
+    #     ("bjet1_pt_nom"),
+    #     (lambda a: a>0)
+    # ),
+    "bjet1_masked_e":(
+        ("bjet1_e", "bjet1_pt_nom"),
+        (lambda a, b: a * (b>0))
+    ),
+    "bjet1_masked_px":(
+        ("bjet1_px", "bjet1_pt_nom"),
+        (lambda a, b: a * (b>0))
+    ),
+    "bjet1_masked_py":(
+        ("bjet1_py", "bjet1_pt_nom"),
+        (lambda a, b: a * (b>0))
+    ),
+    "bjet1_masked_pz":(
+        ("bjet1_pz", "bjet1_pt_nom"),
+        (lambda a, b: a * (b>0))
+    ),
+    "bjet1_masked_btagDeepFlavB":(
+        ("bjet1_btagDeepFlavB", "bjet1_pt_nom"),
+        (lambda a, b: a * (b>0))
+    ),
+    "bjet1_masked_PNetCvB": (
+        ("bjet1_PNetCvB", "bjet1_pt_nom"),
+        (lambda a, b: a * (b>0))
+    ), 
+    "bjet1_masked_PNetCvL":(
+        ("bjet1_PNetCvL", "bjet1_pt_nom"),
+        (lambda a, b: a * (b>0))
+    ),
+    "bjet1_masked_HHbtag":(
+        ("bjet1_HHbtag", "bjet1_pt_nom"),
+        (lambda a, b: a * (b>0))
+    ),
+    # "mask_bjet2":(
+    #     ("bjet2_pt_nom"),
+    #     (lambda a: a>0)
+    # ),
+    "bjet2_masked_e":(
+        ("bjet2_e", "bjet2_pt_nom"),
+        (lambda a, b: a * (b>0))
+    ),
+    "bjet2_masked_px":(
+        ("bjet2_px", "bjet2_pt_nom"),
+        (lambda a, b: a * (b>0))
+    ),
+    "bjet2_masked_py":(
+        ("bjet2_py", "bjet2_pt_nom"),
+        (lambda a, b: a * (b>0))
+    ),
+    "bjet2_masked_pz":(
+        ("bjet2_pz", "bjet2_pt_nom"),
+        (lambda a, b: a * (b>0))
+    ),
+    "bjet2_masked_btagDeepFlavB":(
+        ("bjet2_btagDeepFlavB", "bjet2_pt_nom"),
+        (lambda a, b: a * (b>0))
+    ),
+    "bjet2_masked_PNetCvB": (
+        ("bjet2_PNetCvB", "bjet2_pt_nom"),
+        (lambda a, b: a * (b>0))
+    ), 
+    "bjet2_masked_PNetCvL":(
+        ("bjet2_PNetCvL", "bjet2_pt_nom"),
+        (lambda a, b: a * (b>0))
+    ),
+    "bjet2_masked_HHbtag":(
+        ("bjet2_HHbtag", "bjet2_pt_nom"),
+        (lambda a, b: a * (b>0))
     )
 }
 
 
 
 embedding_expected_inputs = {
-    "pairType": [0, 1, 2, 3, 4, 5],
+    "pairType": [0, 1, 2, 3, 4, 5, 6],
     "dau1_DM": [-999, 0, 1, 10, 11],  # -1 for e/mu
     "dau2_DM": [-999, 0, 1, 10, 11],
     "dau1_charge": [-1, 1],
     "dau2_charge": [-1, 1],
-    "spin": [0, 2],
-    "year": [0, 1, 2, 3, 4, 5, 6, 7, 8,],
-    "hasResolvedAK4": [0, 1],
+    # "spin": [0, 2],
+    # "year": [0, 1, 2, 3, 4, 5, 6, 7, 8,],
+    # "hasResolvedAK4": [0, 1],
     "hasBoostedAK8": [0, 1],
-    "hasVBFAK4": [0, 1],
-    "pass_pnet": [0, 1],
-    "top_mass_idx": [0, 1, 2, 3],
-    "has_bjet1": [0, 1],
-    "has_bjet2": [0, 1],
-    "has_bjet_pair": [0, 1],
+    # "hasVBFAK4": [0, 1],
+    # "pass_pnet": [0, 1],
+    #"top_mass_idx": [0, 1, 2, 3],
+    # "has_bjet1": [0, 1],
+    # "has_bjet2": [0, 1],
+    # "has_bjet_pair": [0, 1],
 }
 
 
@@ -1761,6 +1866,9 @@ lbn_sets = {
             "bjet1_masked_e", "bjet1_masked_px", "bjet1_masked_py", "bjet1_masked_pz",
             "bjet2_masked_e", "bjet2_masked_px", "bjet2_masked_py", "bjet2_masked_pz",
             "fatjet_masked_e", "fatjet_masked_px", "fatjet_masked_py", "fatjet_masked_pz",
+            # "bjet1_e", "bjet1_px", "bjet1_py", "bjet1_pz",
+            # "bjet2_e", "bjet2_px", "bjet2_py", "bjet2_pz",
+            # "fatjet_e", "fatjet_px", "fatjet_py", "fatjet_pz",
             None, "met_px", "met_py", None,
         ],
         output_features=["E", "pt", "eta", "m", "pair_cos"],
