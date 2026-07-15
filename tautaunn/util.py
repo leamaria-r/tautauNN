@@ -56,8 +56,6 @@ def _load_root_file_impl(
             ak_array = tree.arrays(features, cut=selections, aliases=cclub_aliases, library="ak")
             ak_array = ak.with_field(ak_array, sample.year_flag, "year_flag")
             ak_array = ak.with_field(ak_array, 1.0, "sum_weights")
-            rec = ak_array.to_numpy()
-            # print(features)
         else:
             rec = np.array([])
         return rec, d["nweightedevents"], file_name
