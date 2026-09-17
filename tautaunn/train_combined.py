@@ -213,6 +213,8 @@ def train(
     parameterize_spin: bool = False,
     # add the generator mass for the signal samples as continuous input -> network parameterized in mass
     parameterize_mass: bool = False,
+    # add the generator kl for the signal samples as continuous input -> network parameterized in kl
+    parametrize_kl: bool = True,
     # the name of a regression config set to use
     regression_set: str | None = None,
     # the name of the lbn set to use
@@ -268,6 +270,7 @@ def train(
     parameterize_year_any = parameterize_year or (regression_cfg and regression_cfg.parameterize_year)
     parameterize_spin_any = parameterize_spin or (regression_cfg and regression_cfg.parameterize_spin)
     parameterize_mass_any = parameterize_mass or (regression_cfg and regression_cfg.parameterize_mass)
+    parametrize_kl_any = parametrize_kl or (regression_cfg and regression_cfg.parametrize_kl)
 
     # conditionally change arguments
     if seed is None:
@@ -301,6 +304,7 @@ def train(
         parameterize_year=parameterize_year,
         parameterize_spin=parameterize_spin,
         parameterize_mass=parameterize_mass,
+        parametrize_kl=parametrize_kl,
         regression_set=regression_set,
         lbn_set=lbn_set,
         fold_index=fold_index,
@@ -400,6 +404,7 @@ def train(
             n_classes,
             parameterize_year_any,
             parameterize_mass_any,
+            parametrize_kl_any,
             parameterize_spin_any,
             n_folds,
             fold_index,
@@ -461,6 +466,12 @@ def train(
                 cont_inputs = np.append(
                     cont_inputs,
                     (np.ones(n_events, dtype=np.float32) * sample.mass)[:, None],
+                    axis=1,
+                )
+            if parametrize_kl_any:
+                cont_inputs = np.append(
+                    cont_inputs,
+                    (np.ones(n_events, dtype=np.float32) * sample.kl)[:, None],
                     axis=1,
                 )
             if parameterize_spin_any:
@@ -604,6 +615,22 @@ def train(
         dnn_cont_input_vars = np.append(dnn_cont_input_vars, [mass_var], axis=0)
     if regression_cfg and regression_cfg.parameterize_mass:
         reg_cont_input_names.append("mass")
+
+     # handle kls
+    kls = sorted(float(sample.kl) for sample in samples)
+    if parametrize_kl_any:
+        assert len(kls) > 0
+        combined_cont_input_names.append("kl")
+    if parametrize_kl:
+        cont_input_names.append("kl")
+        dnn_cont_input_indices.append(len(combined_cont_input_names) - 1)
+        # add unweighted means and variances assuming a completely uniform kl distribution
+        kl_mean = (max(kls) + min(kls)) / 2
+        kl_var = (max(kls) - min(kls)) ** 2 / 12
+        dnn_cont_input_means = np.append(dnn_cont_input_means, [kl_mean], axis=0)
+        dnn_cont_input_vars = np.append(dnn_cont_input_vars, [kl_var], axis=0)
+    if regression_cfg and regression_cfg.parametrize_kl:
+        reg_cont_input_names.append("kl")
 
     # handle spins
     spins = sorted(int(sample.spin) for sample in samples if sample.spin >= 0)
@@ -1237,6 +1264,7 @@ def train(
                     "final_learning_rate": float(model.optimizer.lr.numpy()),
                     "parameterize_spin": parameterize_spin,
                     "parameterize_mass": parameterize_mass,
+                    "parametrize_kl": parametrize_kl,
                     "regression_set": regression_set,
                     "lbn_set": lbn_set,
                 },

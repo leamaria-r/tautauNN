@@ -17,6 +17,8 @@ masses = [
     700, 750, 800, 850, 900, 1000, 1250, 1500, 1750, 2000, 2500, 3000,
 ]
 
+kls = [0,1,2.45,5]
+
 spins = [0, 2]
 
 br_hh_bbtt = 0.073056256
@@ -292,6 +294,7 @@ class Sample:
     loss_weight: float = 1.0
     spin: int = -1
     mass: float = -1.0
+    kl: float = 1.0
     category: str = ''
     version: str = ''
 
@@ -312,7 +315,7 @@ class Sample:
 
     @property
     def hash_values(self) -> tuple[Any]:
-        return (self.skim_name, self.year, self.label, self.loss_weight, self.spin, self.mass)
+        return (self.skim_name, self.year, self.label, self.loss_weight, self.spin, self.mass, self.kl)
 
     @property
     def skim_name(self) -> str:
@@ -346,6 +349,7 @@ class Sample:
             loss_weight=loss_weight,
             spin=self.spin,
             mass=self.mass,
+            kl=self.kl,
             category=self.category,
             version=self.version
         )
@@ -552,32 +556,32 @@ sample_sets = {
     ],
     "ggf": [
         #res1-2b
-        Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=1.),
-        Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=0.),
-        Sample("ggHH_kl_2p45_kt_1_c2_0_hbbhtt", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=2.45),
-        Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=5.),
-        Sample("DYto2[E,M]*", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=2),
-        Sample("DYto2Tau-2Jets_MLL-50_0J", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=2),
-        Sample("DYto2Tau-2Jets_MLL-50_1J", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=2),
-        Sample("DYto2Tau-2Jets_MLL-50_2J", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=2),
-        Sample("TTto2L2Nu", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=1),
-        Sample("TTtoLNu2Q", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=1),
-        Sample("TTto4Q", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=1),
-        Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2022", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=1),
-        Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2022", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=0),
-        Sample("ggHH_kl_2p45_kt_1_c2_0_hbbhtt", year="2022", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=2.45),
-        Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2022", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=5),
-        Sample("DYto2[E,M]*", year="2022", category="res[1,2]b", version="Prod_26_03", label=2),
-        Sample("DYto2Tau-2Jets_MLL-50_0J", year="2022", category="res[1,2]b", version="Prod_26_03", label=2),
-        Sample("DYto2Tau-2Jets_MLL-50_1J", year="2022", category="res[1,2]b", version="Prod_26_03", label=2),
-        Sample("DYto2Tau-2Jets_MLL-50_2J", year="2022", category="res[1,2]b", version="Prod_26_03", label=2),
-        Sample("TTto2L2Nu", year="2022", category="res[1,2]b", version="Prod_26_03", label=1),
-        Sample("TTtoLNu2Q", year="2022", category="res[1,2]b", version="Prod_26_03", label=1),
-        Sample("TTto4Q", year="2022", category="res[1,2]b", version="Prod_26_03", label=1),
-        Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2023", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=1),
-        Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2023", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=0),
+        # Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=1.),
+        # Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=0.),
+        # Sample("ggHH_kl_2p45_kt_1_c2_0_hbbhtt", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=2.45),
+        # Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=5.),
+        # Sample("DYto2[E,M]*", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=2),
+        # Sample("DYto2Tau-2Jets_MLL-50_0J", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=2),
+        # Sample("DYto2Tau-2Jets_MLL-50_1J", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=2),
+        # Sample("DYto2Tau-2Jets_MLL-50_2J", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=2),
+        # Sample("TTto2L2Nu", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=1),
+        # Sample("TTtoLNu2Q", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=1),
+        # Sample("TTto4Q", year="2022EE", category="res[1,2]b", version="Prod_26_03", label=1),
+        # Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2022", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=1.),
+        # Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2022", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=0.),
+        # Sample("ggHH_kl_2p45_kt_1_c2_0_hbbhtt", year="2022", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=2.45),
+        # Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2022", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=5.),
+        # Sample("DYto2[E,M]*", year="2022", category="res[1,2]b", version="Prod_26_03", label=2),
+        # Sample("DYto2Tau-2Jets_MLL-50_0J", year="2022", category="res[1,2]b", version="Prod_26_03", label=2),
+        # Sample("DYto2Tau-2Jets_MLL-50_1J", year="2022", category="res[1,2]b", version="Prod_26_03", label=2),
+        # Sample("DYto2Tau-2Jets_MLL-50_2J", year="2022", category="res[1,2]b", version="Prod_26_03", label=2),
+        # Sample("TTto2L2Nu", year="2022", category="res[1,2]b", version="Prod_26_03", label=1),
+        # Sample("TTtoLNu2Q", year="2022", category="res[1,2]b", version="Prod_26_03", label=1),
+        # Sample("TTto4Q", year="2022", category="res[1,2]b", version="Prod_26_03", label=1),
+        Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2023", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=1.),
+        Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2023", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=0.),
         Sample("ggHH_kl_2p45_kt_1_c2_0_hbbhtt", year="2023", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=2.45),
-        Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2023", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=5),
+        Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2023", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=5.),
         Sample("DYto2[E,M]*", year="2023", category="res[1,2]b", version="Prod_26_03", label=2),
         Sample("DYto2Tau-2Jets_MLL-50_0J", year="2023", category="res[1,2]b", version="Prod_26_03", label=2),
         Sample("DYto2Tau-2Jets_MLL-50_1J", year="2023", category="res[1,2]b", version="Prod_26_03", label=2),
@@ -585,10 +589,10 @@ sample_sets = {
         Sample("TTto2L2Nu", year="2023", category="res[1,2]b", version="Prod_26_03", label=1),
         Sample("TTtoLNu2Q", year="2023", category="res[1,2]b", version="Prod_26_03", label=1),
         Sample("TTto4Q", year="2023", category="res[1,2]b", version="Prod_26_03", label=1),
-        Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2023BPix", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=1),
-        Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2023BPix", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=0),
+        Sample("ggHH_kl_1_kt_1_c2_0_hbbhtt", year="2023BPix", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=1.),
+        Sample("ggHH_kl_0_kt_1_c2_0_hbbhtt", year="2023BPix", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=0.),
         Sample("ggHH_kl_2p45_kt_1_c2_0_hbbhtt", year="2023BPix", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=2.45),
-        Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2023BPix", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=5),
+        Sample("ggHH_kl_5_kt_1_c2_0_hbbhtt", year="2023BPix", category="res[1,2]b", version="Prod_26_03", label=0, spin=0, mass=250.0, kl=5.),
         Sample("DYto2[E,M]*", year="2023BPix", category="res[1,2]b", version="Prod_26_03", label=2),
         Sample("DYto2Tau-2Jets_MLL-50_0J", year="2023BPix", category="res[1,2]b", version="Prod_26_03", label=2),
         Sample("DYto2Tau-2Jets_MLL-50_1J", year="2023BPix", category="res[1,2]b", version="Prod_26_03", label=2),
@@ -1565,6 +1569,7 @@ class RegressionSet:
     parameterize_year: bool = False
     parameterize_spin: bool = True
     parameterize_mass: bool = True
+    parametrize_kl: bool = True
     use_reg_outputs: bool = True
     use_reg_last_layer: bool = True
     use_cls_outputs: bool = True
@@ -1590,6 +1595,7 @@ regression_sets = {
         parameterize_year=False,
         parameterize_spin=True,
         parameterize_mass=True,
+        parametrize_kl=True,
         use_reg_outputs=False,
         use_reg_last_layer=True,
         use_cls_outputs=False,
