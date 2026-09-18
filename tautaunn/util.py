@@ -447,6 +447,7 @@ def create_model_name(*, model_name=None, model_prefix=None, model_suffix=None, 
         add("year", "parameterize_year")
         add("spin", "parameterize_spin")
         add("mass", "parameterize_mass")
+        add("kl", "parametrize_kl")
         add("rs", "regression_set")
         add("lb", "lbn_set")
         add("bw", "background_weight")
